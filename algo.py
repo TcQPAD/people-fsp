@@ -1,10 +1,12 @@
+
+
 '''
     Class that holds the algorithm to move to the exit
     of the map
 '''
 class Algorithm :
 
-    def __init__(self, map, display=False):
+    def __init__(self, peopleNumber, map, display=False):
 
         self.map = map
 
@@ -13,4 +15,10 @@ class Algorithm :
         self.result = self.simulate()
         return self.result
 
-    simulate(self) : 
+    
+    '''
+        Simulates the movement of 
+        2^peopleNumber persons to the upper left corner
+        of the map.
+    '''
+    simulate(self) :    
