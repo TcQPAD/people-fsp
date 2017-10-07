@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 
 '''
@@ -11,7 +13,7 @@ class Algorithm :
         self.map = map
 
     start(self) :
-
+    
         self.result = self.simulate()
         return self.result
 

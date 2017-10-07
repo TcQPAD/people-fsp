@@ -1,8 +1,11 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--show-ui", 
+        "--showUi", 
         type=str, 
         default="true",
         help="Valeur booléenne spécifiant si la partie graphique devrait être affichée ou non. \nValeur par défaut : faux." 
@@ -12,21 +15,21 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
 
-    if args.show-ui :
+    if args.showUi :
 
         # create an object that inputs data randomly 
-        if args.show-ui == "true" :
-            
-            return
+        if args.showUi == "true" :
+            print("Starting project with UI!")
+            exit(0)
 
         else :
-
-            return
+            print("Starting project with no UI!")
+            exit(0)
 
     else :
         # inputs the data by reading the given image
-        
-        return
+        print("Starting project with no UI!")
+        exit(0)
 
 
 '''
