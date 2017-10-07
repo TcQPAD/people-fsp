@@ -4,6 +4,8 @@
 import math   # To use math.pow(x,y) = x^y
 
 from person import Person
+from random import randint
+
 
 DEFAULT_PEOPLE_NUMBER = 4
 
@@ -30,9 +32,16 @@ class Algorithm :
     Starts the algorithm
     '''
     def startAlgo(self) :
-        self.setUpThreads()
+        self.setUp()
         self.simulate()
         
+    '''
+    Sets up all the actors of the simulation
+    '''
+    def setUp(self) :
+        self.setUpThreads()
+        self.setUpMap()
+
     '''
     Creates N threads representing people,
     with N = self.peopleNumber
@@ -43,6 +52,21 @@ class Algorithm :
             self.persons.append(Person(self))
             i+=1
 
+    '''
+    Distributes the persons across the map
+    '''
+    def setUpMap(self) :
+        for person in self.persons :
+            randX = randint(0, self.map.getSizeX() - 1)
+            randY = randint(0, self.map.getSizeY() - 1)
+
+            if self.map.hasPerson(randX, randY) :
+                while self.map.hasPerson(randX, randY) :
+                    randX = randint(0, self.map.getSizeX() - 1)
+                    randY = randint(0, self.map.getSizeY() - 1)
+
+            self.map.setCell(randX, randY, person)
+
     
     '''
     Simulates the movement of 
@@ -50,5 +74,7 @@ class Algorithm :
     of the map.
     '''
     def simulate(self) :    
-        for person in self.persons :
-            print("Got a person : ", person)
+        for x in range(0, self.map.getSizeX() - 1) :
+            for y in range(0, self.map.getSizeY() - 1) :
+                if self.map.getCell(x, y) != 0 :
+                    print("Map[" + str(x) + "][" + str(y) + "] = ", self.map.getCell(x, y))
