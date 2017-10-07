@@ -17,3 +17,6 @@ class Person(Thread) :
     def __init__(self, algorithm):
         Thread.__init__(self)
         self.algorithm = algorithm
+
+
+    

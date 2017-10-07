@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import math   # To use math.pow(x,y) = x^y
+
 from person import Person
 
 DEFAULT_PEOPLE_NUMBER = 4
@@ -24,19 +26,22 @@ class Algorithm :
     def x(self):
         return self.map
 
-    start(self) :
-    
-        self.result = self.simulate()
-        return self.result
-
+    '''
+    Starts the algorithm
+    '''
+    def startAlgo(self) :
+        self.setUpThreads()
+        self.simulate()
+        
     '''
     Creates N threads representing people,
     with N = self.peopleNumber
     '''
-    setUpThreads(self) :
+    def setUpThreads(self) :
         i = 0
-        while i < self.peopleNumber :
+        while i < math.pow(2, self.peopleNumber) :
             self.persons.append(Person(self))
+            i+=1
 
     
     '''
@@ -44,5 +49,6 @@ class Algorithm :
     2^peopleNumber persons to the upper left corner
     of the map.
     '''
-    simulate(self) :    
-
+    def simulate(self) :    
+        for person in self.persons :
+            print("Got a person : ", person)

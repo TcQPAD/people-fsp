@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from core.map import Map
+from core.algo import Algorithm
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
@@ -19,6 +22,8 @@ if __name__ == '__main__':
 
         # create an object that inputs data randomly 
         if args.showUi == "true" :
+            algorithm = Algorithm(Map())
+            algorithm.startAlgo()
             print("Starting project with UI!")
             exit(0)
 
