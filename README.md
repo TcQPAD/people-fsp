@@ -87,6 +87,7 @@ Le	rapport	doit :
 **Quelques	primitives	pour	mesurer	le	temps en	posix,	 vous	 pouvez	 bien	 évidemment	en	utiliser	
 d’autres...**
 
+```
 clock_t **clock** (void);
 The	 **clock** ()	function	determines	the	amount	of	processor	time	used	since	the	invocation	of	the	
 calling	process,	measured	in	CLOCKS_PER_SECs	of	a	second.
@@ -132,8 +133,9 @@ next	known option	character.		An	option	character	is	known if	it	has	been	specif
 string	of	accepted	option	characters,	optstring.
 La	commande	getopt	vous permet	d’analyser	les	paramètres	utiliser	lors	du	‘lancement’	du	
 processus.
+```
 
-##Authors
+## Authors
 
 [Clément Béal](mailto:clement.beal@etu.unice.fr)
 [Maxime Flament](mailto:maxime.flament@etu.unice.fr)
