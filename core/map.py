@@ -25,8 +25,8 @@ class Map :
     '''
     Returns true if the given cell contains a person
     '''
-    def hasPerson(self, x, y) :
-        return self.map[x][y] != 0
+    def isCellTaken(self, x, y) :
+        return (self.map[x][y] != Tile.empty and self.map[x][y] != Tile.obstacle)
 
     def getCell(self, x, y):
         return self.map[x][y]

@@ -32,15 +32,20 @@ class Algorithm :
     Starts the algorithm
     '''
     def startAlgo(self) :
+        print("Setting up algorithm parameters")
         self.setUp()
+        print("Finished setting up algorithm actors and parameters.\nStarting simulation.")
         self.simulate()
         
     '''
     Sets up all the actors of the simulation
     '''
     def setUp(self) :
+        print("Setting up %d threads for %d persons", self.peopleNumber, self.peopleNumber)
         self.setUpThreads()
+        print("Finished setting up threads. Setting up the map by distributing people in it.")
         self.setUpMap()
+        print("Finished distributing %d persons in the map", self.peopleNumber)
 
     '''
     Creates N threads representing people,
@@ -57,11 +62,13 @@ class Algorithm :
     '''
     def setUpMap(self) :
         for person in self.persons :
+            print("Placing new person")
             randX = randint(0, self.map.getSizeX() - 1)
             randY = randint(0, self.map.getSizeY() - 1)
 
-            if self.map.hasPerson(randX, randY) :
-                while self.map.hasPerson(randX, randY) :
+            if self.map.isCellTaken(randX, randY) :
+                while self.map.isCellTaken(randX, randY) :
+                    print("A person already exists at these coordinates (%d, %d). Generating new placement for given person.", randX, randY)
                     randX = randint(0, self.map.getSizeX() - 1)
                     randY = randint(0, self.map.getSizeY() - 1)
 

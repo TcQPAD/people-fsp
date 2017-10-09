@@ -22,7 +22,8 @@ if __name__ == '__main__':
 
         # create an object that inputs data randomly 
         if args.showUi == "true" :
-            algorithm = Algorithm(Map())
+            map = Map()
+            algorithm = Algorithm(map)
             algorithm.startAlgo()
             print("Starting project with UI!")
             exit(0)
