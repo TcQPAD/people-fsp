@@ -3,7 +3,7 @@
 
 import math   # To use math.pow(x,y) = x^y
 
-from person import Person
+from core.person import Person
 from random import randint
 
 
