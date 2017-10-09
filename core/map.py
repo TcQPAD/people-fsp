@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from threading import Lock
 from __future__ import print_function
 from enum import Enum
 import random
@@ -18,6 +19,12 @@ MAP_Y = 128
 '''
 class Map :
 
+    '''
+    The object that will do the magic to synchronize the calling threads,
+    i.e., the Person objects.
+    '''
+    sharedMapLock = Lock()
+    
     def __init__(self) :
         self.map = [[Tile.empty for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
         self.fillMap()
@@ -39,6 +46,13 @@ class Map :
 
     def getSizeY(self) :
         return MAP_Y
+
+    '''
+    Returns true if the given coordinates correspond
+    to an exit cell
+    '''
+    def isAtExit(self, x, y) :
+        return self.map[x][y] == Tile.exit
 
     def fillMap(self) :
         self.createBorder()

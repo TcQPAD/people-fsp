@@ -23,9 +23,12 @@ class Algorithm :
 
     '''
     A getter for the map
+    
+    /!\ When calling this getter, use it as if it were a field of the class,
+    i.e. : algorithm.getMap.blabla (no parenthesis !!)
     '''
     @property
-    def x(self):
+    def getMap(self):
         return self.map
 
     '''
@@ -41,28 +44,21 @@ class Algorithm :
     Sets up all the actors of the simulation
     '''
     def setUp(self) :
-        print("Setting up %d threads for %d persons", self.peopleNumber, self.peopleNumber)
-        self.setUpThreads()
-        print("Finished setting up threads. Setting up the map by distributing people in it.")
+        p = math.pow(2, self.peopleNumber)
+        print("Setting up %d threads and distributing %d persons", p, p)
         self.setUpMap()
-        print("Finished distributing %d persons in the map", self.peopleNumber)
+        print("Finished setting up threads and distributing %d persons in the map", self.peopleNumber)
 
     '''
     Creates N threads representing people,
     with N = self.peopleNumber
-    '''
-    def setUpThreads(self) :
-        i = 0
-        while i < math.pow(2, self.peopleNumber) :
-            self.persons.append(Person(self))
-            i+=1
-
-    '''
     Distributes the persons across the map
     '''
     def setUpMap(self) :
-        for person in self.persons :
-            print("Placing new person")
+        i = 0
+        nbP = math.pow(2, self.peopleNumber)
+        while i < nbP :
+            print("Creating and placing new person")
             randX = randint(0, self.map.getSizeX() - 1)
             randY = randint(0, self.map.getSizeY() - 1)
 
@@ -71,8 +67,11 @@ class Algorithm :
                     print("A person already exists at these coordinates (%d, %d). Generating new placement for given person.", randX, randY)
                     randX = randint(0, self.map.getSizeX() - 1)
                     randY = randint(0, self.map.getSizeY() - 1)
-
+            
+            person = Person(self, randX, randY)
+            self.persons.append(person)
             self.map.setCell(randX, randY, person)
+            i+=1
 
     
     '''
@@ -81,7 +80,11 @@ class Algorithm :
     of the map.
     '''
     def simulate(self) :    
+        '''
         for x in range(0, self.map.getSizeX() - 1) :
             for y in range(0, self.map.getSizeY() - 1) :
                 if self.map.getCell(x, y) != 0 :
                     print("Map[" + str(x) + "][" + str(y) + "] = ", self.map.getCell(x, y))
+        '''
+        for person in self.persons :
+            person.run()
