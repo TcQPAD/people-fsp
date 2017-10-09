@@ -22,6 +22,24 @@ class Map :
         self.map = [[Tile.empty for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
         self.fillMap()
 
+    '''
+    Returns true if the given cell contains a person
+    '''
+    def hasPerson(self, x, y) :
+        return self.map[x][y] != 0
+
+    def getCell(self, x, y):
+        return self.map[x][y]
+
+    def setCell(self, x, y, val) :
+        self.map[x][y] = val
+
+    def getSizeX(self) :
+        return MAP_X
+
+    def getSizeY(self) :
+        return MAP_Y
+
     def fillMap(self) :
         self.createBorder()
         self.createExit()
