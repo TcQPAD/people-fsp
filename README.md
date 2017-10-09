@@ -137,6 +137,6 @@ processus.
 
 ## Authors
 
-    [Clément Béal](mailto:clement.beal@etu.unice.fr)
-    [Maxime Flament](mailto:maxime.flament@etu.unice.fr)
-    [Grégory Merlet](mailto:gregory.merlet@etu.unice.fr)
+- [Clément Béal](mailto:clement.beal@etu.unice.fr)
+- [Maxime Flament](mailto:maxime.flament@etu.unice.fr)
+- [Grégory Merlet](mailto:gregory.merlet@etu.unice.fr)
