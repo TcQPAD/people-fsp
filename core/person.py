@@ -19,6 +19,11 @@ class Person(threading.Thread) :
         self.algorithm = algorithm
         self.threadId = threadId
 
+        '''
+        The object that will do the magic to synchronize the calling threads.
+        '''
+        self.sharedMapLock = threading.Lock()
+
         # Initial coordinates of this person
         self._x = x
         self._y = y
@@ -40,11 +45,15 @@ class Person(threading.Thread) :
 
     @x.setter
     def x(self, x):
+        self.sharedMapLock.acquire()
         self._x = x
+        self.sharedMapLock.release()
 
     @y.setter
     def y(self, y):
+        self.sharedMapLock.acquire()
         self._y = y
+        self.sharedMapLock.release()
 
     
     '''
@@ -58,11 +67,11 @@ class Person(threading.Thread) :
     start() to make this class run
     '''
     def run(self) :
-        while True :
-            if self.algorithm.getMap.isAtExit(self) :
-                print "{0}\n".format("Reached exit, stopping this thread... " + str(self.threadId)),
-                break
-            
+        # this person will move until he reaches the exit of the map :
+        # (0,0), (0,1), (1,0), (1,1)
+        while not self.algorithm.getMap.isAtExit(self) :
             print "{0}\n".format("Moving person... " + str(self.threadId)),
             self.algorithm.getMap.movePerson(self)
     
+        print "{0}\n".format("Reached exit, stopping this thread... " + str(self.threadId) + " \tCoordinates: ("  + str(self._x) + ", " + str(self._y) + ") "
+         + "\t" + str(self.algorithm.getMap.getCell(self._x, self._y))),

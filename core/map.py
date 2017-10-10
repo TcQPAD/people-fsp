@@ -20,22 +20,22 @@ MAP_Y = 128
     Class to describe the map
 '''
 class Map :
-
-    '''
-    The object that will do the magic to synchronize the calling threads,
-    i.e., the Person objects.
-    '''
-    sharedMapLock = Lock()
     
     def __init__(self) :
         self.map = [[Tile.empty for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
         self.fillMap()
 
+        '''
+        The object that will do the magic to synchronize the calling threads,
+        i.e., the Person objects.
+        '''
+        self.sharedMapLock = Lock()
+
     '''
     Returns true if the given cell contains a person
     '''
     def isCellTaken(self, x, y) :
-        return (self.map[x][y] != Tile.empty and self.map[x][y] != Tile.obstacle)
+        return self.map[x][y] != Tile.empty and self.map[x][y] != Tile.obstacle
 
     def getCell(self, x, y):
         return self.map[x][y]
@@ -50,10 +50,10 @@ class Map :
         return MAP_Y
 
     '''
-    Returns true if the given cell has a person in it
+    Returns true if the given cell has the given person in it
     '''
-    def hasPerson(self, x, y) :
-        return isinstance(self.getCell(x, y), Person) #and not self.isCellTaken(x, y)
+    def hasPerson(self, person) :
+        return person == self.map[person.x][person.y]
 
     '''
     Returns true if the given person has reached an exit cell correspond
@@ -67,7 +67,12 @@ class Map :
     that MINIMIZES the distance from (x,y) to the Tile.exit cells
     '''
     def movePerson(self, person) :
-        if not self.hasPerson(person.x, person.y) :
+        self.sharedMapLock.acquire()
+
+        if not self.hasPerson(person) :
+            # we need to release the lock, or the thread throwing this error will keep this ressource
+            # locked and we'll have deadlocks.
+            self.sharedMapLock.release()
             raise IndexError("No person exists in the provided cell : (%d, %d)", person.x, person.y)
 
         else :
@@ -81,6 +86,8 @@ class Map :
                     # if person is not at the exit, we make it move and replace the cell
             if not self.isAtExit(person) :
                 self.map[person.x][person.y] = person
+
+        self.sharedMapLock.release()
 
     def fillMap(self) :
         self.createBorder()

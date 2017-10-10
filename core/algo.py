@@ -6,7 +6,6 @@ import math   # To use math.pow(x,y) = x^y
 from core.person import Person
 from random import randint
 
-
 DEFAULT_PEOPLE_NUMBER = 4
 
 '''
@@ -20,6 +19,7 @@ class Algorithm :
         self.map = map
         self.peopleNumber = peopleNumber
         self.persons = []
+        self.personNotAtExit = None
 
     '''
     A getter for the map
@@ -80,6 +80,7 @@ class Algorithm :
     def checkResults(self) :
         for person in self.persons :
             if not self.getMap.isAtExit(person) :
+                self.personNotAtExit = person
                 return False
 
         return True
@@ -104,4 +105,5 @@ class Algorithm :
         if self.checkResults() :
             print("Simulation was successful")
         else :
+            print("Person not at exit: ", self.personNotAtExit, self.personNotAtExit.x, self.personNotAtExit.y)
             raise Exception("Some persons didn't reach the exit of the map")
