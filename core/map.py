@@ -1,10 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from threading import Lock
 from __future__ import print_function
+from threading import Lock
 from enum import Enum
 import random
+
+from person import Person
 
 class Tile(Enum):
     empty = 0
@@ -48,11 +50,37 @@ class Map :
         return MAP_Y
 
     '''
-    Returns true if the given coordinates correspond
+    Returns true if the given cell has a person in it
+    '''
+    def hasPerson(self, x, y) :
+        return isinstance(self.getCell(x, y), Person) #and not self.isCellTaken(x, y)
+
+    '''
+    Returns true if the given person has reached an exit cell correspond
     to an exit cell
     '''
-    def isAtExit(self, x, y) :
-        return self.map[x][y] == Tile.exit
+    def isAtExit(self, person) :
+        return self.map[person.x][person.y] == Tile.exit
+
+    '''
+    Moves the person at the given cell to the new AVAILABLE cell
+    that MINIMIZES the distance from (x,y) to the Tile.exit cells
+    '''
+    def movePerson(self, person) :
+        if not self.hasPerson(person.x, person.y) :
+            raise IndexError("No person exists in the provided cell : (%d, %d)", person.x, person.y)
+
+        else :
+            # empty the cell
+            self.map[person.x][person.y] = Tile.empty
+            if person.x > 0 :
+                person.x = person.x - 1
+            if person.y > 0 :
+                person.y = person.y - 1
+
+                    # if person is not at the exit, we make it move and replace the cell
+            if not self.isAtExit(person) :
+                self.map[person.x][person.y] = person
 
     def fillMap(self) :
         self.createBorder()

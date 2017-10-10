@@ -23,7 +23,7 @@ class Algorithm :
 
     '''
     A getter for the map
-    
+
     /!\ When calling this getter, use it as if it were a field of the class,
     i.e. : algorithm.getMap.blabla (no parenthesis !!)
     '''
@@ -68,7 +68,7 @@ class Algorithm :
                     randX = randint(0, self.map.getSizeX() - 1)
                     randY = randint(0, self.map.getSizeY() - 1)
             
-            person = Person(self, randX, randY)
+            person = Person(self, randX, randY, i)
             self.persons.append(person)
             self.map.setCell(randX, randY, person)
             i+=1
@@ -79,12 +79,25 @@ class Algorithm :
     2^peopleNumber persons to the upper left corner
     of the map.
     '''
-    def simulate(self) :    
-        '''
-        for x in range(0, self.map.getSizeX() - 1) :
-            for y in range(0, self.map.getSizeY() - 1) :
-                if self.map.getCell(x, y) != 0 :
-                    print("Map[" + str(x) + "][" + str(y) + "] = ", self.map.getCell(x, y))
-        '''
+    def simulate(self) :
         for person in self.persons :
-            person.run()
+            # we call start method to run the thread (run() method is called by start())
+            person.start()
+            #person.join()
+
+        # this code will be executed when all threads have finished running
+        # since we called thread.join() after starting it
+        if self.checkResults() :
+            print("Simulation was successful")
+        else :
+            raise Exception("Some persons didn't reach the exit of the map")
+
+    '''
+    Check that all persons have reached the exit of the map
+    '''
+    def checkResults(self) :
+        for person in self.persons :
+            if not self.getMap.isAtExit(person) :
+                return False
+
+        return True
