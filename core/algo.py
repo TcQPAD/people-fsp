@@ -73,24 +73,6 @@ class Algorithm :
             self.map.setCell(randX, randY, person)
             i+=1
 
-    
-    '''
-    Simulates the movement of 
-    2^peopleNumber persons to the upper left corner
-    of the map.
-    '''
-    def simulate(self) :
-        for person in self.persons :
-            # we call start method to run the thread (run() method is called by start())
-            person.start()
-            #person.join()
-
-        # this code will be executed when all threads have finished running
-        # since we called thread.join() after starting it
-        if self.checkResults() :
-            print("Simulation was successful")
-        else :
-            raise Exception("Some persons didn't reach the exit of the map")
 
     '''
     Check that all persons have reached the exit of the map
@@ -101,3 +83,25 @@ class Algorithm :
                 return False
 
         return True
+    
+    '''
+    Simulates the movement of 
+    2^peopleNumber persons to the upper left corner
+    of the map.
+    '''
+    def simulate(self) :
+        for person in self.persons :
+            # we call start method to run the thread (run() method is called by start())
+            person.start()
+        
+        # waits the end of the threads execution in order to check the results after they finished
+        # executing (if not, an exception will be raised before the simulation starts)
+        for person in self.persons :
+            person.join()
+
+        # this code will be executed when all threads have finished running
+        # since we called thread.join() after starting it
+        if self.checkResults() :
+            print("Simulation was successful")
+        else :
+            raise Exception("Some persons didn't reach the exit of the map")
