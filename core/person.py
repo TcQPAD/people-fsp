@@ -74,7 +74,7 @@ class Person(threading.Thread) :
             self.algorithm.getMap.movePerson(self)
     
         if not self.algorithm.getMap.isAtExit(self) :
-            print "{0}\n".format("Person not at exit: " + str(self.threadId), str(self._x), str(self._y)),
+            print "{0}\n".format("Person not at exit: " + str(self.threadId) + "\t, coordinates: " + str(self._x) + ", " + str(self._y)),
             raise Exception("Some persons didn't reach the exit of the map")
         else :
             print "{0}\n".format("Simulation was successful for person " + str(self.threadId)),
