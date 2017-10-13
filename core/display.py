@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import turtle
+from threading import Lock
 
 DEFAULT_DISPLAY_WIDTH = 500
 DEFAULT_DISPLAY_HEIGHT = 500
@@ -19,6 +20,8 @@ class Display :
         self.height = height
         self.xOrigin = MARGIN - width/2
         self.yOrigin = height/2 - MARGIN
+        
+        self.sharedDisplayLock = Lock()
         
         turtle.setup(width, height)  #Initialise la fenêtre en 500*500
         turtle.title("Projet Prog Concurente")
@@ -70,12 +73,14 @@ class Display :
     Draw an colored dot on the display
     '''
     def drawDot(self, x, y, color):
+        self.sharedDisplayLock.acquire()
         turtle.color(color)
         turtle.goto(self.getRelativeXPosition(x), self.getRelativeYPosition(y))
         turtle.pendown()
         turtle.dot(2)
         turtle.penup()
         turtle.color("black")
+        self.sharedDisplayLock.release()
     
     '''
     Draw an exit dot on the display

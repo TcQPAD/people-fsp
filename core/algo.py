@@ -5,6 +5,7 @@ import math   # To use math.pow(x,y) = x^y
 
 from core.person import Person
 from random import randint
+from core.display import Display
 
 DEFAULT_PEOPLE_NUMBER = 4
 
@@ -20,6 +21,9 @@ class Algorithm :
         self.peopleNumber = peopleNumber
         self.persons = []
         self.personNotAtExit = None
+        if display == True :
+            self.display = Display(550, 350)
+            self.display.drawBorders(self.map.getSizeX(), self.map.getSizeY())
 
     '''
     A getter for the map
@@ -31,6 +35,16 @@ class Algorithm :
     def getMap(self):
         return self.map
 
+    '''
+    A getter for the display
+
+    /!\ When calling this getter, use it as if it were a field of the class,
+    i.e. : algorithm.getDisplay.blabla (no parenthesis !!)
+    '''
+    @property
+    def getDisplay(self):
+        return self.display
+        
     '''
     Starts the algorithm
     '''
