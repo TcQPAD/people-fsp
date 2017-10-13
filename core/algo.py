@@ -19,7 +19,6 @@ class Algorithm :
         self.map = map
         self.peopleNumber = peopleNumber
         self.persons = []
-        self.personNotAtExit = None
 
     '''
     A getter for the map
@@ -71,17 +70,6 @@ class Algorithm :
             self.persons.append(Person(self, randX, randY, i))
             self.map.setCell(randX, randY, self.persons[i])
             i+=1
-
-    '''
-    Check that all persons have reached the exit of the map
-    '''
-    def checkResults(self) :
-        for person in self.persons :
-            if not self.getMap.isAtExit(person) :
-                self.personNotAtExit = person
-                return False
-
-        return True
     
     '''
     Simulates the movement of 
@@ -97,11 +85,4 @@ class Algorithm :
         # executing (if not, an exception will be raised before the simulation starts)
         for person in self.persons :
             person.join()
-
-        # this code will be executed when all threads have finished running
-        # since we called thread.join() after starting it
-        if self.checkResults() :
-            print("Simulation was successful")
-        else :
-            print("Person not at exit: ", self.personNotAtExit, self.personNotAtExit.x, self.personNotAtExit.y)
-            raise Exception("Some persons didn't reach the exit of the map")
+            
