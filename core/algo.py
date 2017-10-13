@@ -68,11 +68,9 @@ class Algorithm :
                     randX = randint(0, self.map.getSizeX() - 1)
                     randY = randint(0, self.map.getSizeY() - 1)
             
-            person = Person(self, randX, randY, i)
-            self.persons.append(person)
-            self.map.setCell(randX, randY, person)
+            self.persons.append(Person(self, randX, randY, i))
+            self.map.setCell(randX, randY, self.persons[i])
             i+=1
-
 
     '''
     Check that all persons have reached the exit of the map

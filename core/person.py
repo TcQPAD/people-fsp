@@ -73,5 +73,4 @@ class Person(threading.Thread) :
             print "{0}\n".format("Moving person... " + str(self.threadId)),
             self.algorithm.getMap.movePerson(self)
     
-        print "{0}\n".format("Reached exit, stopping this thread... " + str(self.threadId) + " \tCoordinates: ("  + str(self._x) + ", " + str(self._y) + ") "
-         + "\t" + str(self.algorithm.getMap.getCell(self._x, self._y))),
+        print "{0}\n".format("Reached exit, stopping this thread... " + str(self.threadId)),
