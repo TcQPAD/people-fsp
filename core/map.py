@@ -7,6 +7,7 @@ from enum import Enum
 import random
 
 from person import Person
+from core.display import Display
 
 class Tile(Enum):
     empty = 0
@@ -21,7 +22,8 @@ MAP_Y = 128
 '''
 class Map :
     
-    def __init__(self) :
+    def __init__(self, display=None) :
+        self.display = display
         self.map = [[Tile.empty for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
         self.fillMap()
 
@@ -128,6 +130,9 @@ class Map :
             y1 = random.randint(4, MAP_Y / 2)
             y2 = random.randint(y1, MAP_Y - 2)
             self.fillArea(x1, y1, x2, y2)
+            
+            if self.display != None :
+                self.display.drawObstacle(x1, y1, x2, y2)
 
     def fillArea(self, x1, y1, x2, y2) :
         for x in range (x1, x2):

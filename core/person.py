@@ -71,7 +71,14 @@ class Person(threading.Thread) :
         # (0,0), (0,1), (1,0), (1,1)
         while not self.algorithm.getMap.isAtExit(self) :
             print "{0}\n".format("Moving person... " + str(self.threadId)),
+            '''
+            #Uncomment to desactivate trace    
+            if self.algorithm.getDisplay != None :
+                self.algorithm.getDisplay.erasePerson(self._x, self._y)
+            '''
             self.algorithm.getMap.movePerson(self)
+            if self.algorithm.getDisplay != None :
+                self.algorithm.getDisplay.drawPerson(self._x, self._y)
     
         if not self.algorithm.getMap.isAtExit(self) :
             print "{0}\n".format("Person not at exit: " + str(self.threadId) + "\t, coordinates: " + str(self._x) + ", " + str(self._y)),

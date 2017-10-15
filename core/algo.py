@@ -5,6 +5,7 @@ import math   # To use math.pow(x,y) = x^y
 
 from core.person import Person
 from random import randint
+from core.display import Display
 
 DEFAULT_PEOPLE_NUMBER = 4
 
@@ -14,11 +15,12 @@ of the map
 '''
 class Algorithm :
 
-    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=False):
+    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None):
 
         self.map = map
         self.peopleNumber = peopleNumber
         self.persons = []
+        self.display = display
 
     '''
     A getter for the map
@@ -29,6 +31,16 @@ class Algorithm :
     @property
     def getMap(self):
         return self.map
+
+    '''
+    A getter for the display
+
+    /!\ When calling this getter, use it as if it were a field of the class,
+    i.e. : algorithm.getDisplay.blabla (no parenthesis !!)
+    '''
+    @property
+    def getDisplay(self):
+        return self.display
 
     '''
     Starts the algorithm
@@ -85,4 +97,3 @@ class Algorithm :
         # executing (if not, an exception will be raised before the simulation starts)
         for person in self.persons :
             person.join()
-            
