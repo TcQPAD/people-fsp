@@ -80,16 +80,26 @@ class Map :
         else :
             # empty the cell
             self.map[person.x][person.y] = Tile.empty
-            if person.x > 0 :
-                person.x = person.x - 1
-            if person.y > 0 :
-                person.y = person.y - 1
-
-                    # if person is not at the exit, we make it move and replace the cell
+            if person.x > 0 and person.y > 0 :
+                self.choosePersonNextCase(person)
             if not self.isAtExit(person) :
                 self.map[person.x][person.y] = person
 
         self.sharedMapLock.release()
+
+    '''
+        Choose a person's next case to avoid obstacles
+        '''
+    def choosePersonNextCase(self, person):
+        if not self.isObstacle(person.x - 1, person.y - 1):
+            person.x = person.x - 1
+            person.y = person.y - 1
+        else:
+            if not self.isObstacle(person.x - 1, person.y):
+                person.x = person.x - 1
+            else:
+                if not self.isObstacle(person.x, person.y - 1):
+                    person.y = person.y - 1
 
     def fillMap(self) :
         self.createBorder()
