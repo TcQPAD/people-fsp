@@ -15,15 +15,13 @@ of the map
 '''
 class Algorithm :
 
-    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=False):
+    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None):
 
         self.map = map
         self.peopleNumber = peopleNumber
         self.persons = []
         self.personNotAtExit = None
-        if display == True :
-            self.display = Display(550, 350)
-            self.display.drawBorders(self.map.getSizeX(), self.map.getSizeY())
+        self.display = display
 
     '''
     A getter for the map

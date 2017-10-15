@@ -3,6 +3,7 @@
 
 from core.map import Map
 from core.algo import Algorithm
+from core.display import Display
 
 if __name__ == '__main__':
     import argparse
@@ -22,8 +23,10 @@ if __name__ == '__main__':
 
         # create an object that inputs data randomly 
         if args.showUi == "true" :
-            map = Map()
-            algorithm = Algorithm(map, 4, True)
+            display = Display(550, 350)
+            map = Map(display)
+            display.drawBorders(map.getSizeX(), map.getSizeY())
+            algorithm = Algorithm(map, 4, display)
             algorithm.startAlgo()
             print("Starting project with UI!")
             exit(0)

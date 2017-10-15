@@ -56,15 +56,15 @@ class Display :
     '''
     Draw an obstacle on the display
     '''
-    def drawObstacle(self, x, y, width, height):
+    def drawObstacle(self, x1, y1, x2, y2):
         turtle.color("red")
         turtle.fill(True)
-        turtle.goto(self.getRelativeXPosition(x), self.getRelativeYPosition(y))
+        turtle.goto(self.getRelativeXPosition(x1), self.getRelativeYPosition(y1))
         turtle.pendown()
-        turtle.goto(self.getRelativeXPosition(x + width), self.getRelativeYPosition(y))
-        turtle.goto(self.getRelativeXPosition(x + width), self.getRelativeYPosition(y + height))
-        turtle.goto(self.getRelativeXPosition(x), self.getRelativeYPosition(y + height))
-        turtle.goto(self.getRelativeXPosition(x), self.getRelativeYPosition(y))
+        turtle.goto(self.getRelativeXPosition(x2), self.getRelativeYPosition(y1))
+        turtle.goto(self.getRelativeXPosition(x2), self.getRelativeYPosition(y2))
+        turtle.goto(self.getRelativeXPosition(x1), self.getRelativeYPosition(y2))
+        turtle.goto(self.getRelativeXPosition(x1), self.getRelativeYPosition(y1))
         turtle.penup()
         turtle.fill(False)
         turtle.color("black")
