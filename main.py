@@ -5,6 +5,30 @@ from core.map import Map
 from core.algo import Algorithm
 from core.display import Display
 
+'''
+    Starts the project by outputting information about the processes only,
+    without UI. 
+'''
+def noUI():
+    map = Map()
+    algorithm = Algorithm(map, nbP)
+    algorithm.startAlgo()
+    print("Starting project with no UI!")
+    return
+
+'''
+    Starts the project by outputting information about the processes and by
+    outputting through a UI. 
+'''
+def yesUI():
+    display = Display(550, 350)
+    map = Map(display)
+    display.drawBorders(map.getSizeX(), map.getSizeY())
+    algorithm = Algorithm(map, nbP, display)
+    algorithm.startAlgo()
+    print("Starting project with UI!")
+    return
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
@@ -27,45 +51,23 @@ if __name__ == '__main__':
 
     nbP = 4
 
-    if args.p :
-        nbP = args.p
+    if args.p:
+        if args.p <= 512*128:
+            nbP = args.p
+        else:
+            raise Exception("Too many people in args, using 4 persons instead")
 
-    if args.showUi :
+    if args.showUi:
 
         # create an object that inputs data randomly 
         if args.showUi == "true" :
-            display = Display(550, 350)
-            map = Map(display)
-            display.drawBorders(map.getSizeX(), map.getSizeY())
-            algorithm = Algorithm(map, nbP, display)
-            algorithm.startAlgo()
-            print("Starting project with UI!")
+            yesUI()
             exit(0)
 
         else :
-            print("Starting project with no UI!")
+            noUI()
             exit(0)
 
     else :
-        # inputs the data by reading the given image
-        print("Starting project with no UI!")
+        noUI()
         exit(0)
-
-
-'''
-    Starts the project by outputting information about the processes only,
-    without UI. 
-'''
-def noUI() :
-
-
-
-    return
-
-'''
-    Starts the project by outputting information about the processes and by
-    outputting through a UI. 
-'''
-def yesUI() : 
-
-    return
