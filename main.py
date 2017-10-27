@@ -15,9 +15,20 @@ if __name__ == '__main__':
         help="Valeur booléenne spécifiant si la partie graphique devrait être affichée ou non. \nValeur par défaut : faux." 
         )
 
+    parser.add_argument(
+        "-p",
+        type=int,
+        default=4,
+        help="Puissance de 2 pour le nombre de personnes à insérer dans la simulation. Valeur par défaut: 4 (donc 2^4 = 16 personnes)."
+    )
+
     # récupère les arguments dans un objet (appelable comme un struct en C)
     args = parser.parse_args()
 
+    nbP = 4
+
+    if args.p :
+        nbP = args.p
 
     if args.showUi :
 
@@ -26,7 +37,7 @@ if __name__ == '__main__':
             display = Display(550, 350)
             map = Map(display)
             display.drawBorders(map.getSizeX(), map.getSizeY())
-            algorithm = Algorithm(map, 4, display)
+            algorithm = Algorithm(map, nbP, display)
             algorithm.startAlgo()
             print("Starting project with UI!")
             exit(0)
