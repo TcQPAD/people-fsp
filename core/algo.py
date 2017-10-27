@@ -73,7 +73,7 @@ class Algorithm :
             randX = randint(0, self.map.getSizeX() - 1)
             randY = randint(0, self.map.getSizeY() - 1)
 
-            if self.map.isCellTaken(randX, randY) :
+            if self.map.isCellTaken(randX, randY) and not self.map.isObstacle(randX, randY) :
                 while self.map.isCellTaken(randX, randY) :
                     print("A person already exists at these coordinates (%d, %d). Generating new placement for given person.", randX, randY)
                     randX = randint(0, self.map.getSizeX() - 1)
