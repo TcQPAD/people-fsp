@@ -132,7 +132,8 @@ class Map :
         self.map[1][1] = Tile.exit
 
     def createObstacle(self):
-        numberObstacleToGenerate = random.randint(5,9)
+        #numberObstacleToGenerate = random.randint(5,9)
+        numberObstacleToGenerate = 1
         for i in range(numberObstacleToGenerate):
             x1 = random.randint(2, MAP_X / 2)
             x2 = random.randint(x1, MAP_X - 3)
