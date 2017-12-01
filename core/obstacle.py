@@ -11,6 +11,10 @@ class Obstacle:
         self.y1 = y1
         self.y2 = y2
 
+    '''
+        Check if the obtacle is contained in this obstacle
+        :return TRUE if the given obstacle is contained ELSE false
+    '''
     def isInside(self, obstacle):
         x1Test = obstacle.x1
         x2Test = obstacle.x2

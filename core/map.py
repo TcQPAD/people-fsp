@@ -180,3 +180,14 @@ class Map :
                 return True
 
         return False
+
+    def saveMap(self, persons):
+        file = open("map.txt", "w")
+
+        for obstacle in self.obstacleList:
+            file.write(str(obstacle.x1) + " " + str(obstacle.x2) + " " + str(obstacle.y1) + " " + str(obstacle.y2) + "\n")
+
+        for person in persons:
+            file.write(str(person._x) + " " + str(person._y) + "\n")
+
+        file.close()

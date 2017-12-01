@@ -82,7 +82,8 @@ class Algorithm :
             self.persons.append(Person(self, randX, randY, i))
             self.map.setCell(randX, randY, self.persons[i])
             i+=1
-    
+
+        self.map.saveMap(self.persons)
     '''
     Simulates the movement of 
     2^peopleNumber persons to the upper left corner
