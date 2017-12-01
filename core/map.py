@@ -2,18 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
-from threading import Lock
-from enum import Enum
+from tile import Tile
+from tile_value_enum import TileValueEnum
 import random
 
 from core.obstacle import Obstacle
 from person import Person
 from core.display import Display
 
-class Tile(Enum):
-    empty = 0
-    obstacle = 1
-    exit = 2
 
 MAP_X = 512
 MAP_Y = 128
@@ -23,81 +19,90 @@ NAME_MAP = "map.txt"
 '''
     Class to describe the map
 '''
-class Map :
+
+
+class Map:
 
     def __init__(self, loadedMap, display=None) :
         self.obstacleList = []
         self.display = display
+        self.map = [[Tile(TileValueEnum.empty) for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
         self.loadedMap = loadedMap
-        self.map = [[Tile.empty for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
-
 
         self.fillMap()
         self.draw()
 
-        '''
-        The object that will do the magic to synchronize the calling threads,
-        i.e., the Person objects.
-        '''
-        self.sharedMapLock = Lock()
-
     '''
     Returns true if the given cell contains a person
     '''
-    def isCellTaken(self, x, y) :
-        return self.map[x][y] != Tile.empty and self.map[x][y] != Tile.obstacle
+
+    def isCellTaken(self, x, y):
+        return self.map[x][y].isCellTaken()
 
     def getCell(self, x, y):
-        return self.map[x][y]
+        return self.map[x][y].getContent()
 
-    def setCell(self, x, y, val) :
-        self.map[x][y] = val
+    def setCell(self, x, y, val):
+        self.map[x][y].setContent(val)
 
-    def getSizeX(self) :
+    def getSizeX(self):
         return MAP_X
 
-    def getSizeY(self) :
+    def getSizeY(self):
         return MAP_Y
 
     '''
     Returns true if the given cell has the given person in it
     '''
-    def hasPerson(self, person) :
-        return person == self.map[person.x][person.y]
+
+    def hasPerson(self, person):
+        return self.map[person.x][person.y].hasPerson(person)
 
     '''
     Returns true if the given person has reached an exit cell correspond
     to an exit cell
     '''
-    def isAtExit(self, person) :
-        return self.map[person.x][person.y] == Tile.exit
+
+    def isAtExit(self, person):
+        return self.map[person.x][person.y].isAtExit()
+
+    '''
+    Returns true if the given Tile has an obstacle
+    '''
+
+    def isObstacle(self, x, y):
+        return self.map[x][y].isObstacle()
+
+    '''
+    Returns true if the given Tile is an exit
+    '''
+
+    def isExit(self, x, y):
+        return self.map[x][y].isExit()
 
     '''
     Moves the person at the given cell to the new AVAILABLE cell
-    that MINIMIZES the distance from (x,y) to the Tile.exit cells
+    that MINIMIZES the distance from (x,y) to the TileValueEnum.exit cells
     '''
-    def movePerson(self, person) :
-        self.sharedMapLock.acquire()
 
-        if not self.hasPerson(person) :
-            # we need to release the lock, or the thread throwing this error will keep this ressource
-            # locked and we'll have deadlocks.
-            self.sharedMapLock.release()
+    def movePerson(self, person):
+
+        if not self.hasPerson(person):
             raise IndexError("No person exists in the provided cell : (%d, %d)", person.x, person.y)
 
-        else :
+        else:
             # empty the cell
-            self.map[person.x][person.y] = Tile.empty
-            if person.x > 0 and person.y > 0 :
+            self.map[person.x][person.y].setContent(TileValueEnum.empty)
+            if person.x > 0 and person.y > 0:
                 self.choosePersonNextCase(person)
-            if not self.isAtExit(person) :
-                self.map[person.x][person.y] = person
+            if not self.isAtExit(person):
+                self.map[person.x][person.y].setContent(person)
 
-        self.sharedMapLock.release()
 
     '''
-        Choose a person's next case to avoid obstacles
-        '''
+    Choose a person's next case to avoid obstacles
+    '''
+
     def choosePersonNextCase(self, person):
         if not self.isObstacle(person.x - 1, person.y - 1):
             person.x = person.x - 1
@@ -109,7 +114,7 @@ class Map :
                 if not self.isObstacle(person.x, person.y - 1):
                     person.y = person.y - 1
 
-    def fillMap(self) :
+    def fillMap(self):
         self.createBorder()
         self.createExit()
 
@@ -124,26 +129,26 @@ class Map :
         '''
         On mets les bordures nord et sud
         '''
-        for y in range (MAP_Y + 2):
-            self.map[0][y] = Tile.obstacle
+        for y in range(MAP_Y + 2):
+            self.map[0][y] = Tile(TileValueEnum.obstacle)
 
-        for y in range (MAP_Y + 2):
-            self.map[511][y] = Tile.obstacle
+        for y in range(MAP_Y + 2):
+            self.map[511][y] = Tile(TileValueEnum.obstacle)
 
         '''
         On mets les bordures ouest et est
         '''
 
-        for x in range (1, MAP_X + 1):
-            self.map[x][0] = Tile.obstacle
-        for x in range (1, MAP_X + 1):
-            self.map[x][127] = Tile.obstacle
+        for x in range(1, MAP_X + 1):
+            self.map[x][0] = Tile(TileValueEnum.obstacle)
+        for x in range(1, MAP_X + 1):
+            self.map[x][127] = Tile(TileValueEnum.obstacle)
 
     def createExit(self):
-        self.map[0][0] = Tile.exit
-        self.map[0][1] = Tile.exit
-        self.map[1][0] = Tile.exit
-        self.map[1][1] = Tile.exit
+        self.map[0][0] = Tile(TileValueEnum.exit)
+        self.map[0][1] = Tile(TileValueEnum.exit)
+        self.map[1][0] = Tile(TileValueEnum.exit)
+        self.map[1][1] = Tile(TileValueEnum.exit)
 
     def createObstacle(self):
         numberObstacleToGenerate = random.randint(3, 5)
@@ -165,19 +170,13 @@ class Map :
     def fillArea(self, x1, y1, x2, y2) :
         for x in range (x1, x2):
             for y in range(y1, y2):
-                self.map[x][y] = Tile.obstacle
-
-    def isObstacle(self, x, y) :
-        return self.map[x][y] == Tile.obstacle
-
-    def isExit(self, x, y) :
-        return self.map[x][y] == Tile.exit
+                self.map[x][y] = Tile(TileValueEnum.obstacle)
 
     def printMap(self):
-        for x in range (MAP_X):
-            for y in range (MAP_Y):
+        for x in range(MAP_X):
+            for y in range(MAP_Y):
                 print(self.map[x][y].value, end='')
-            print ('\n', end='')
+            print('\n', end='')
 
     def checkCoordonnee(self, obstacle):
         if not self.obstacleList:
