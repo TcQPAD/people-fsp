@@ -6,6 +6,7 @@ from threading import Lock
 from enum import Enum
 import random
 
+from core.obstacle import Obstacle
 from person import Person
 from core.display import Display
 
@@ -21,8 +22,9 @@ MAP_Y = 128
     Class to describe the map
 '''
 class Map :
-    
+
     def __init__(self, display=None) :
+        self.obstacleList = []
         self.display = display
         self.map = [[Tile.empty for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
         self.fillMap()
@@ -132,18 +134,25 @@ class Map :
         self.map[1][1] = Tile.exit
 
     def createObstacle(self):
-        #numberObstacleToGenerate = random.randint(5,9)
-        numberObstacleToGenerate = 1
-        for i in range(numberObstacleToGenerate):
+        numberObstacleToGenerate = random.randint(3, 5)
+        i = 0
+
+        while (i  < numberObstacleToGenerate ):
             x1 = random.randint(2, MAP_X / 2)
             x2 = random.randint(x1, MAP_X - 3)
 
             y1 = random.randint(4, MAP_Y / 2)
             y2 = random.randint(y1, MAP_Y - 2)
-            self.fillArea(x1, y1, x2, y2)
-            
-            if self.display != None :
-                self.display.drawObstacle(x1, y1, x2, y2)
+
+            obstacle = Obstacle(x1, x2, y1, y2)
+
+            if not self.checkCoordonnee(obstacle):
+                self.fillArea(x1, y1, x2, y2)
+                i = i + 1
+                self.obstacleList.append(obstacle)
+
+                if self.display != None :
+                    self.display.drawObstacle(x1, y1, x2, y2)
 
     def fillArea(self, x1, y1, x2, y2) :
         for x in range (x1, x2):
@@ -162,3 +171,12 @@ class Map :
                 print(self.map[x][y].value, end='')
             print ('\n', end='')
 
+    def checkCoordonnee(self, obstacle):
+        if not self.obstacleList:
+            return False
+
+        for oneObstacle in self.obstacleList:
+            if obstacle.isInside(oneObstacle) :
+                return True
+
+        return False
