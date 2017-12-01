@@ -18,16 +18,23 @@ class Tile(Enum):
 MAP_X = 512
 MAP_Y = 128
 
+NAME_MAP = "map.txt"
+
 '''
     Class to describe the map
 '''
 class Map :
 
-    def __init__(self, display=None) :
+    def __init__(self, loadedMap, display=None) :
+        print(loadedMap)
         self.obstacleList = []
         self.display = display
+        self.loadedMap = loadedMap
         self.map = [[Tile.empty for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
+
+
         self.fillMap()
+        self.draw()
 
         '''
         The object that will do the magic to synchronize the calling threads,
@@ -106,7 +113,13 @@ class Map :
     def fillMap(self) :
         self.createBorder()
         self.createExit()
-        self.createObstacle()
+
+        if not self.loadedMap:
+            print("Map : created" + str(self.loadedMap))
+            self.createObstacle()
+        else:
+            print("Map : load")
+            self.loadMap()
 
     def createBorder(self):
         '''
@@ -147,12 +160,8 @@ class Map :
             obstacle = Obstacle(x1, x2, y1, y2)
 
             if not self.checkCoordonnee(obstacle):
-                self.fillArea(x1, y1, x2, y2)
                 i = i + 1
                 self.obstacleList.append(obstacle)
-
-                if self.display != None :
-                    self.display.drawObstacle(x1, y1, x2, y2)
 
     def fillArea(self, x1, y1, x2, y2) :
         for x in range (x1, x2):
@@ -182,12 +191,50 @@ class Map :
         return False
 
     def saveMap(self, persons):
-        file = open("map.txt", "w")
+        file = open(NAME_MAP, "w")
 
         for obstacle in self.obstacleList:
             file.write(str(obstacle.x1) + " " + str(obstacle.x2) + " " + str(obstacle.y1) + " " + str(obstacle.y2) + "\n")
+
+        file.write("#\n")
 
         for person in persons:
             file.write(str(person._x) + " " + str(person._y) + "\n")
 
         file.close()
+
+    def loadMap(self):
+        file = open(NAME_MAP, "r")
+        line = file.readline()
+
+        parseObstacle = True
+
+        personList = []
+
+
+        while line:
+            if(line == "#\n"):
+                parseObstacle = False
+                line = file.readline()
+                continue
+
+            coordonnee = line.split(' ')
+            if(parseObstacle):
+                self.obstacleList.append(Obstacle(int(coordonnee[0]), int(coordonnee[1]),  int(coordonnee[2]), int(coordonnee[3])))
+            else :
+                personList.append(Person(None, int(coordonnee[0]), int(coordonnee[1]), None))
+
+            line = file.readline()
+        file.close()
+
+
+    def draw(self):
+        print("Draw " + str(len(self.obstacleList)) + " obstacle(s)")
+
+        for obstacle in self.obstacleList:
+            self.fillArea(obstacle.x1, obstacle.x2, obstacle.y1, obstacle.y2)
+
+            if self.display != None :
+                self.display.drawObstacle(obstacle.x1, obstacle.y1, obstacle.x2, obstacle.y2)
+
+

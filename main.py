@@ -10,7 +10,7 @@ from core.display import Display
     without UI. 
 '''
 def noUI():
-    map = Map()
+    map = Map(False, None)
     algorithm = Algorithm(map, nbP)
     algorithm.startAlgo()
     print("Starting project with no UI!")
@@ -22,7 +22,7 @@ def noUI():
 '''
 def yesUI():
     display = Display(550, 350)
-    map = Map(display)
+    map = Map(True, display)
     display.drawBorders(map.getSizeX(), map.getSizeY())
     algorithm = Algorithm(map, nbP, display)
     algorithm.startAlgo()

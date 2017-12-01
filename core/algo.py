@@ -15,8 +15,9 @@ of the map
 '''
 class Algorithm :
 
-    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None):
+    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None, loadMap = True):
 
+        self.loadMap = loadMap
         self.map = map
         self.peopleNumber = peopleNumber
         self.persons = []
@@ -68,22 +69,24 @@ class Algorithm :
     def setUpMap(self) :
         i = 0
         nbP = math.pow(2, self.peopleNumber)
-        while i < nbP :
-            print("Creating and placing new person")
-            randX = randint(0, self.map.getSizeX() - 1)
-            randY = randint(0, self.map.getSizeY() - 1)
 
-            if self.map.isCellTaken(randX, randY) and not self.map.isObstacle(randX, randY) :
-                while self.map.isCellTaken(randX, randY) :
-                    print("A person already exists at these coordinates (%d, %d). Generating new placement for given person.", randX, randY)
-                    randX = randint(0, self.map.getSizeX() - 1)
-                    randY = randint(0, self.map.getSizeY() - 1)
-            
-            self.persons.append(Person(self, randX, randY, i))
-            self.map.setCell(randX, randY, self.persons[i])
-            i+=1
+        if not self.loadMap:
+            while i < nbP :
+                print("Creating and placing new person")
+                randX = randint(0, self.map.getSizeX() - 1)
+                randY = randint(0, self.map.getSizeY() - 1)
 
-        self.map.saveMap(self.persons)
+                if self.map.isCellTaken(randX, randY) and not self.map.isObstacle(randX, randY) :
+                    while self.map.isCellTaken(randX, randY) :
+                        print("A person already exists at these coordinates (%d, %d). Generating new placement for given person.", randX, randY)
+                        randX = randint(0, self.map.getSizeX() - 1)
+                        randY = randint(0, self.map.getSizeY() - 1)
+
+                self.persons.append(Person(self, randX, randY, i))
+                self.map.setCell(randX, randY, self.persons[i])
+                i+=1
+
+            self.map.saveMap(self.persons)
     '''
     Simulates the movement of 
     2^peopleNumber persons to the upper left corner
