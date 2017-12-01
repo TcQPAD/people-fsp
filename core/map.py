@@ -26,7 +26,6 @@ NAME_MAP = "map.txt"
 class Map :
 
     def __init__(self, loadedMap, display=None) :
-        print(loadedMap)
         self.obstacleList = []
         self.display = display
         self.loadedMap = loadedMap

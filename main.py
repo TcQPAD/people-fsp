@@ -9,8 +9,8 @@ from core.display import Display
     Starts the project by outputting information about the processes only,
     without UI. 
 '''
-def noUI():
-    map = Map(False, None)
+def noUI(loadMap):
+    map = Map(loadMap, None)
     algorithm = Algorithm(map, nbP)
     algorithm.startAlgo()
     print("Starting project with no UI!")
@@ -20,9 +20,9 @@ def noUI():
     Starts the project by outputting information about the processes and by
     outputting through a UI. 
 '''
-def yesUI():
+def yesUI(loadMap):
     display = Display(550, 350)
-    map = Map(True, display)
+    map = Map(loadMap, display)
     display.drawBorders(map.getSizeX(), map.getSizeY())
     algorithm = Algorithm(map, nbP, display)
     algorithm.startAlgo()
@@ -37,6 +37,13 @@ if __name__ == '__main__':
         type=str, 
         default="true",
         help="Valeur booléenne spécifiant si la partie graphique devrait être affichée ou non. \nValeur par défaut : faux." 
+        )
+
+    parser.add_argument(
+        "--loadMap",
+        type=str,
+        default="true",
+        help="Valeur booléenne spécifiant si on charge une carte pré-générée \nValeur par défaut : faux."
         )
 
     parser.add_argument(
@@ -61,11 +68,11 @@ if __name__ == '__main__':
 
         # create an object that inputs data randomly 
         if args.showUi == "true" :
-            yesUI()
+            yesUI(args.loadMap)
             exit(0)
 
         else :
-            noUI()
+            noUI(args.loadMap)
             exit(0)
 
     else :
