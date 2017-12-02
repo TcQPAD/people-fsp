@@ -5,8 +5,7 @@ import math  # To use math.pow(x,y) = x^y
 
 from core.person import Person
 from random import randint, choice
-from core.display import Display
-
+import sys
 DEFAULT_PEOPLE_NUMBER = 4
 
 '''
@@ -86,17 +85,8 @@ class Algorithm:
             # removes it so no other person will be placed here
             randomCoordinates.remove(randomPickCoord)
 
-            if self.map.isCellTaken(randomPickCoord[0], randomPickCoord[1]) and not self.map.isObstacle(randomPickCoord[0], randomPickCoord[1]):
-                while self.map.isCellTaken(randomPickCoord[0], randomPickCoord[1]):
-                    print(
-                        "A person or an obstacle already exists at these coordinates (%d, %d). Generating new "
-                        "placement for given "
-                        "person.",
-                        randomPickCoord[0], randomPickCoord[1])
-
-                    print("Content of Tile is: ", self.map.getCell(randomPickCoord[0], randomPickCoord[1]))
-                    print("Boolean expr is: ", self.map.isCellTaken(randomPickCoord[0], randomPickCoord[1]), self.map.isObstacle(randomPickCoord[0], randomPickCoord[1]))
-
+            if not self.map.canPlacePerson(randomPickCoord[0], randomPickCoord[1]):
+                while not self.map.canPlacePerson(randomPickCoord[0], randomPickCoord[1]):
                     # generate new coordinates in the list so we keep 1 tuple
                     # for each person
                     randomCoordinates.append(
@@ -123,7 +113,12 @@ class Algorithm:
             # we call start method to run the thread (run() method is called by start())
             person.start()
 
-        # waits the end of the threads execution in order to check the results after they finished
-        # executing (if not, an exception will be raised before the simulation starts)
-        for person in self.persons:
-            person.join()
+
+        try:
+            # waits the end of the threads execution in order to check the results after they finished
+            # executing (if not, an exception will be raised before the simulation starts)
+            for person in self.persons:
+                person.join()
+        except(KeyboardInterrupt, SystemExit):
+            print '\n! Received keyboard interrupt, quitting threads.\n'
+            sys.exit()
