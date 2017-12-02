@@ -5,6 +5,8 @@ from core.map import Map
 from core.algo import Algorithm
 from core.display import Display
 
+import psutil
+
 '''
     Starts the project by outputting information about the processes only,
     without UI. 
@@ -64,7 +66,7 @@ if __name__ == '__main__':
         if args.p <= 512 * 128:
             nbP = args.p
         else:
-            raise Exception("Too many people in args, using 4 persons instead")
+            raise Exception("Too many people provided with -p. Max value is : " + str(512*128))
 
     if args.showUi:
 
