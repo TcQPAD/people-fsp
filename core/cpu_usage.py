@@ -19,7 +19,7 @@ class CpuPercent(threading.Thread):
     Keep track of cpu usage.
     """
     def __init__(self):
-        super(CpuPercent, self).__init__()
+        threading.Thread.__init__(self)
         self.cpuBuffer = []
         self.hasToMeasure = True
 
@@ -40,7 +40,14 @@ class CpuPercent(threading.Thread):
 
         i = 0
         for usage in self.cpuBuffer:
-            print("\tusage")
+            print("\t" + str(usage))
             if i == 5:
                 print("\n")
                 i = 0
+
+    """
+    Stops the measurement by setting the boolean
+    self.hasToMeasure to False
+    """
+    def stopAndPrintMeasure(self):
+        self.hasToMeasure = False

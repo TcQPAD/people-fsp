@@ -80,7 +80,7 @@ class Person(threading.Thread):
                 self.algorithm.getDisplay.erasePerson(self._x, self._y)
             '''
             self.algorithm.getMap.movePerson(self)
-            if self.algorithm.getDisplay != None:
+            if self.algorithm.getDisplay is not None:
                 self.algorithm.getDisplay.drawPerson(self._x, self._y)
 
         if not self.algorithm.getMap.isAtExit(self):

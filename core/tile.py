@@ -54,12 +54,12 @@ class Tile:
         self.tileLock.release()
 
     '''
-        Returns true if the given cell has the given person in it
-        '''
+    Returns true if the given cell has the given person in it
+    '''
 
     def hasPerson(self, person):
         self.tileLock.acquire()
-        hP = person == self.content
+        hP = self.content == person
         self.tileLock.release()
         return hP
 

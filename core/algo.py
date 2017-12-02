@@ -23,6 +23,7 @@ class Algorithm:
         self.peopleNumber = peopleNumber
         self.persons = []
         self.display = display
+        self.cpuPercent = cpuPercent
 
     '''
     A getter for the map

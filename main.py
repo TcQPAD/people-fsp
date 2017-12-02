@@ -4,8 +4,7 @@
 from core.map import Map
 from core.algo import Algorithm
 from core.display import Display
-
-import psutil
+from core.cpu_usage import CpuPercent
 
 '''
     Starts the project by outputting information about the processes only,
@@ -14,9 +13,14 @@ import psutil
 
 
 def noUI():
+    cpuPercent = CpuPercent()
+    if args.m:
+        cpuPercent.start()
     map = Map()
     algorithm = Algorithm(map, nbP)
     algorithm.startAlgo()
+    if args.m:
+        cpuPercent.stopAndPrintMeasure()
     print("Starting project with no UI!")
     return
 
@@ -57,6 +61,13 @@ if __name__ == '__main__':
              "= 16 personnes). "
     )
 
+    parser.add_argument(
+        "-m",
+        action = "store_true", # to tell that this option has no value
+        help="Si donné comme argument du programme, affiche des statistiques du CPU sur la sortie standard à la fin de l'exécution"
+             "du programme."
+    )
+
     # récupère les arguments dans un objet (appelable comme un struct en C)
     args = parser.parse_args()
 
@@ -72,6 +83,11 @@ if __name__ == '__main__':
 
         # create an object that inputs data randomly 
         if args.showUi == "true":
+
+            if args.m:
+                noUI()
+                exit(0)
+
             yesUI()
             exit(0)
 
