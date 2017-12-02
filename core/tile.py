@@ -53,29 +53,36 @@ class Tile:
         self.content = contentEnum
         self.tileLock.release()
 
-    '''
+    """
     Returns true if the given cell has the given person in it
-    '''
+    """
 
     def hasPerson(self, person):
         self.tileLock.acquire()
-        hP = self.content == person
+        print"{0}\n".format("Coordinates: " + str(person.x) + " " + str(person.y))
+        hP = self.hasNothingButPerson()
         self.tileLock.release()
         return hP
 
-    '''
-        Returns true if the given person has reached the exit cell
-        '''
+    def hasNothingButPerson(self):
+        return self.content != TileValueEnum.empty \
+               and self.content != TileValueEnum.obstacle \
+               and self.content != TileValueEnum.exit
+
+    """
+    Returns true if the given person has reached the exit cell
+    """
 
     def isAtExit(self):
         self.tileLock.acquire()
         tmp = self.content == TileValueEnum.exit
+        print tmp
         self.tileLock.release()
         return tmp
 
-    '''
+    """
     Returns true if the given cell contains a person
-    '''
+    """
 
     def isCellTaken(self):
         self.tileLock.acquire()
@@ -83,9 +90,18 @@ class Tile:
         self.tileLock.release()
         return tmp
 
-    '''
+    """
+    Returns true if a person can be placed in this Tile
+    """
+    def canPlacePerson(self):
+        self.tileLock.acquire()
+        tmp = (self.content == TileValueEnum.empty)
+        self.tileLock.release()
+        return tmp
+
+    """
     Returns true if the given Tile has an obstacle
-    '''
+    """
 
     def isObstacle(self):
         self.tileLock.acquire()
@@ -93,9 +109,9 @@ class Tile:
         self.tileLock.release()
         return tmp
 
-    '''
+    """
     Returns true if the given Tile is an exit
-    '''
+    """
 
     def isExit(self):
         self.tileLock.acquire()
