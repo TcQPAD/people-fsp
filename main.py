@@ -13,6 +13,7 @@ from core.cpu_usage import CpuPercent
 
 
 def noUI():
+    print("Starting project with no UI!")
     cpuPercent = CpuPercent()
     if args.m:
         cpuPercent.start()
@@ -21,7 +22,6 @@ def noUI():
     algorithm.startAlgo()
     if args.m:
         cpuPercent.stopAndPrintMeasure()
-    print("Starting project with no UI!")
     return
 
 
@@ -32,12 +32,12 @@ def noUI():
 
 
 def yesUI():
+    print("Starting project with UI!")
     display = Display(550, 350)
     map = Map(display)
     display.drawBorders(map.getSizeX(), map.getSizeY())
     algorithm = Algorithm(map, nbP, display)
     algorithm.startAlgo()
-    print("Starting project with UI!")
     return
 
 
