@@ -21,9 +21,8 @@ def noUI():
     outputting through a UI. 
 '''
 def yesUI():
-    display = Display(550, 350)
+    display = Display(512, 128)
     map = Map(display)
-    display.drawBorders(map.getSizeX(), map.getSizeY())
     algorithm = Algorithm(map, nbP, display)
     algorithm.startAlgo()
     print("Starting project with UI!")
