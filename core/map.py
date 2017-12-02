@@ -55,7 +55,8 @@ class Map:
     """
 
     def isAtExit(self, person):
-        return self.map[person.x][person.y].isAtExit()
+        return (person.x == 0 and person.y == 0) or (person.x == 0 and person.y == 1) or (person.x == 1 and person.y == 0) or (person.x == 1 and person.y == 1)
+
 
     """
     Returns true if the given Tile has an obstacle
@@ -91,15 +92,12 @@ class Map:
         else:
             # empty the cell
             self.map[person.x][person.y].setContent(TileValueEnum.empty)
-            if person.x > 0 and person.y > 0:
-                self.choosePersonNextCaseXYPositive(person)
-            elif person.x > 0:
-                self.choosePersonNextCaseYZero(person)
-            elif person.y > 0:
-                self.choosePersonNextCaseXZero(person)
+            if person.x > 0:
+                self.movePersonX(person)
+            if person.y > 0:
+                self.movePersonY(person)
 
             if not self.isAtExit(person):
-                print("hey isAtExit is FALSE")
                 self.map[person.x][person.y].setContent(person)
 
     """
@@ -119,29 +117,24 @@ class Map:
 
     """
     Choose a person's next case to avoid obstacles
-    when y = 0 and x > 0
+    when x > 0
     """
 
-    def choosePersonNextCaseYZero(self, person):
+    def movePersonX(self, person):
         if not self.isObstacle(person.x - 1, person.y):
             person.x -= 1
         else:
-            if not self.isObstacle(person.x - 1, person.y + 1):
-                person.x -= 1
+            if not self.isObstacle(person.x, person.y + 1):
                 person.y += 1
 
     """
     Choose a person's next case to avoid obstacles
-    when y > 0 and x = 0
+    when y > 0
     """
 
-    def choosePersonNextCaseXZero(self, person):
+    def movePersonY(self, person):
         if not self.isObstacle(person.x, person.y - 1):
             person.y -= 1
-        else:
-            if not self.isObstacle(person.x + 1, person.y - 1):
-                person.x += 1
-                person.y -= 1
 
     def fillMap(self):
         self.createBorder()

@@ -50,7 +50,8 @@ class Tile:
 
     def setContent(self, contentEnum):
         self.tileLock.acquire()
-        self.content = contentEnum
+        if not (self.content == TileValueEnum.exit): # to avoid replacing the exit value with a person
+            self.content = contentEnum
         self.tileLock.release()
 
     """
