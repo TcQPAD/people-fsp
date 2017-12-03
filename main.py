@@ -4,6 +4,7 @@
 from core.map import Map
 from core.algo import Algorithm
 from core.display import Display
+from core.cpu_usage import CpuPercent
 
 '''
     Starts the project by outputting information about the processes only,
@@ -12,10 +13,15 @@ from core.display import Display
 
 
 def noUI():
+    print("Starting project with no UI!")
+    cpuPercent = CpuPercent()
+    if args.m:
+        cpuPercent.start()
     map = Map()
     algorithm = Algorithm(map, nbP)
     algorithm.startAlgo()
-    print("Starting project with no UI!")
+    if args.m:
+        cpuPercent.stopAndPrintMeasure()
     return
 
 
@@ -26,11 +32,11 @@ def noUI():
 
 
 def yesUI():
+    print("Starting project with UI!")
     display = Display(512, 128)
     map = Map(display)
     algorithm = Algorithm(map, nbP, display)
     algorithm.startAlgo()
-    print("Starting project with UI!")
     return
 
 
@@ -54,6 +60,13 @@ if __name__ == '__main__':
              "= 16 personnes). "
     )
 
+    parser.add_argument(
+        "-m",
+        action = "store_true", # to tell that this option has no value
+        help="Si donné comme argument du programme, affiche des statistiques du CPU sur la sortie standard à la fin de l'exécution"
+             "du programme."
+    )
+
     # récupère les arguments dans un objet (appelable comme un struct en C)
     args = parser.parse_args()
 
@@ -63,12 +76,17 @@ if __name__ == '__main__':
         if args.p <= 512 * 128:
             nbP = args.p
         else:
-            raise Exception("Too many people in args, using 4 persons instead")
+            raise Exception("Too many people provided with -p. Max value is : " + str(512*128))
 
     if args.showUi:
 
         # create an object that inputs data randomly 
         if args.showUi == "true":
+
+            if args.m:
+                noUI()
+                exit(0)
+
             yesUI()
             exit(0)
 
