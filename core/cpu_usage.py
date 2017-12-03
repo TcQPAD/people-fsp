@@ -21,6 +21,7 @@ class CpuPercent(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.cpuBuffer = []
+        self.responseTime = 0
         self.hasToMeasure = True
 
     """
@@ -33,19 +34,25 @@ class CpuPercent(threading.Thread):
 
     def run(self):
 
+        start_time = time.time()
+
         while self.hasToMeasure:
             self.cpuBuffer.append(ps.cpu_percent(interval=0))
             time.sleep(0.1)
 
-        print("CPU usage :\n")
+        print("\nCPU usage :\n")
 
         i = 0
         for usage in self.cpuBuffer:
-            print("\t" + str(usage)),
+            print("\t" + str(usage) + "%"),
             i += 1
             if i == 5:
                 print("\n")
                 i = 0
+
+        # measure response time
+        self.responseTime = time.time() - start_time
+        print("\n\nResponse time:\t" + str(self.responseTime) + " seconds\n")
 
     """
     Stops the measurement by setting the boolean
