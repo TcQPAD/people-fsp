@@ -6,6 +6,14 @@ from core.algo import Algorithm
 from core.display import Display
 from core.cpu_usage import CpuPercent
 
+import psutil as ps
+import warnings
+import math
+
+# gets the number of physical AND logical cores
+# available on the current machine
+nb__logical_cores = ps.cpu_count(True)
+
 '''
     Starts the project by outputting information about the processes only,
     without UI. 
@@ -75,8 +83,16 @@ if __name__ == '__main__':
     if args.p:
         if args.p <= 512 * 128:
             nbP = args.p
+
         else:
             raise Exception("Too many people provided with -p. Max value is : " + str(512*128))
+
+        # more threads than CPU cores, raise a warning
+        # because program may be slower than expected
+        if math.pow(2, args.p) > nb__logical_cores:
+            warnings.warn("Provided number of threads is > to number of available cores\n"
+                          "It may slow the execution of the program instead of accelerating it !!!\n"
+                          "Number of available cores: " + str(nb__logical_cores), UserWarning)
 
     if args.showUi:
 

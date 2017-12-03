@@ -3,7 +3,7 @@
 
 import threading
 import psutil as ps
-import time # to sleep!
+import time  # to sleep!
 
 """
 Class that can measure CPU usage during the execution of the algorithm,
@@ -14,10 +14,10 @@ Code inspired from here: https://stackoverflow.com/questions/2311301/reliably-mo
 
 
 class CpuPercent(threading.Thread):
-
     """
     Keep track of cpu usage.
     """
+
     def __init__(self):
         threading.Thread.__init__(self)
         self.cpuBuffer = []
@@ -30,17 +30,19 @@ class CpuPercent(threading.Thread):
     This Thread will measure the CPU usage and fill a buffer with the value every seconds.
     The buffer will be output when the algorithm has finished running, and the program is about to exit.
     """
+
     def run(self):
 
         while self.hasToMeasure:
-            self.cpuBuffer.append(ps.cpu_percent(interval=1))
-            time.sleep(1)
+            self.cpuBuffer.append(ps.cpu_percent(interval=0))
+            time.sleep(0.1)
 
         print("CPU usage :\n")
 
         i = 0
         for usage in self.cpuBuffer:
-            print("\t" + str(usage))
+            print("\t" + str(usage)),
+            i += 1
             if i == 5:
                 print("\n")
                 i = 0
@@ -49,5 +51,6 @@ class CpuPercent(threading.Thread):
     Stops the measurement by setting the boolean
     self.hasToMeasure to False
     """
+
     def stopAndPrintMeasure(self):
         self.hasToMeasure = False
