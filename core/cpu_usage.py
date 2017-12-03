@@ -4,6 +4,7 @@
 import threading
 import psutil as ps
 import time  # to sleep!
+import json
 
 """
 Class that can measure CPU usage during the execution of the algorithm,
@@ -18,9 +19,11 @@ class CpuPercent(threading.Thread):
     Keep track of cpu usage.
     """
 
-    def __init__(self):
+    def __init__(self, execution_nb=0):
         threading.Thread.__init__(self)
         self.cpuBuffer = []
+        self.json_format = {}
+        self.execution_nb = execution_nb
         self.responseTime = 0
         self.hasToMeasure = True
 
@@ -53,6 +56,29 @@ class CpuPercent(threading.Thread):
         # measure response time
         self.responseTime = time.time() - start_time
         print("\n\nResponse time:\t" + str(self.responseTime) + " seconds\n")
+
+        self.save_res_to_file()
+
+    """
+    Saves the results of the execution to a
+    JSON file
+    The "a" mode allows to append to a file
+    """
+    def save_res_to_file(self):
+        self.json_format["run_" + str(self.execution_nb)] = {"cpu_usage": json.dumps(self.cpuBuffer),
+                                                             "res_time": self.responseTime}
+        with open("res.json", "a") as res_file:
+            # first execution
+            if self.execution_nb == 0:
+                res_file.write("[\n")
+            elif self.execution_nb != 0:
+                res_file.write(",\n")
+            res_file.write("\t")
+            json.dump(self.json_format, res_file)
+
+            # last execution
+            if self.execution_nb == 4:
+                res_file.write("\n]")
 
     """
     Stops the measurement by setting the boolean
