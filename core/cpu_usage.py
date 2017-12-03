@@ -57,7 +57,7 @@ class CpuPercent(threading.Thread):
         self.responseTime = time.time() - start_time
         print("\n\nResponse time:\t" + str(self.responseTime) + " seconds\n")
 
-        self.save_res_to_file()
+        #self.save_res_to_file()
 
     """
     Saves the results of the execution to a
@@ -85,5 +85,34 @@ class CpuPercent(threading.Thread):
     self.hasToMeasure to False
     """
 
-    def stopAndPrintMeasure(self):
+    def stopMeasure(self):
         self.hasToMeasure = False
+
+    """
+    Reads the file with the save measurements values, and
+    displays them nicely on the standard output
+    """
+    def produce_report(self):
+        with open("res.json", "rb") as res_file:
+            content = res_file.read()
+
+        data = json.loads(content)
+
+        mean_cpu_usage = 0
+        mean_res_time = 0
+        cpt_cu = 0
+        cpt_rt = 0
+        run_cpt = 0
+
+        for x in data:
+            list_us = [float(i) for i in x["run_" + str(run_cpt)]["cpu_usage"].strip('[]').split(',')]
+            for y in list_us:
+                mean_cpu_usage += y
+                cpt_cu += 1
+
+            mean_res_time += float(x["run_" + str(run_cpt)]["res_time"])
+            cpt_rt += 1
+            run_cpt += 1
+
+        print("\n\n\tMean CPU Usage of all 5 simulations:\t" + str(mean_cpu_usage/cpt_cu) + "%")
+        print("\n\n\tMean Response Time of all 5 simulations:\t" + str(mean_res_time/cpt_rt) + "%\n")

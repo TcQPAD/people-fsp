@@ -29,7 +29,11 @@ def noUI():
     algorithm = Algorithm(map, nbP)
     algorithm.startAlgo()
     if args.m:
-        cpuPercent.stopAndPrintMeasure()
+        cpuPercent.stopMeasure()
+        cpuPercent.produce_report()
+
+
+
     return
 
 
