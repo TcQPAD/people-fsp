@@ -98,6 +98,8 @@ class CpuPercent(threading.Thread):
 
         data = json.loads(content)
 
+        tmp_l_cpu_us = []
+        tmp_l_rt = []
         mean_cpu_usage = 0
         mean_res_time = 0
         cpt_cu = 0
@@ -110,9 +112,31 @@ class CpuPercent(threading.Thread):
                 mean_cpu_usage += y
                 cpt_cu += 1
 
-            mean_res_time += float(x["run_" + str(run_cpt)]["res_time"])
+            tmp_l_cpu_us.append(mean_cpu_usage/cpt_cu)
+
+            tmp_l_rt.append(float(x["run_" + str(run_cpt)]["res_time"]))
             cpt_rt += 1
             run_cpt += 1
 
-        print("\n\n\tMean CPU Usage of all 5 simulations:\t" + str(mean_cpu_usage/cpt_cu) + "%")
-        print("\n\n\tMean Response Time of all 5 simulations:\t" + str(mean_res_time/cpt_rt) + " seconds\n")
+        print(tmp_l_cpu_us)
+        print(tmp_l_rt)
+
+        # eliminates the min and max values to keep intermediate values
+        min_v, idx = min((val, idx) for (idx, val) in enumerate(tmp_l_cpu_us))
+        max_v, idx = max((val, idx) for (idx, val) in enumerate(tmp_l_cpu_us))
+        tmp_l_cpu_us.remove(min_v)
+        tmp_l_cpu_us.remove(max_v)
+
+        min_v, idx = min((val, idx) for (idx, val) in enumerate(tmp_l_rt))
+        max_v, idx = max((val, idx) for (idx, val) in enumerate(tmp_l_rt))
+        tmp_l_rt.remove(min_v)
+        tmp_l_rt.remove(max_v)
+
+        print(tmp_l_cpu_us)
+        print(tmp_l_rt)
+
+        mean_cpu_usage = sum(tmp_l_cpu_us)/3
+        mean_res_time = sum(tmp_l_rt)/3
+
+        print("\n\n\tMean CPU Usage of all 5 simulations:\t" + str(mean_cpu_usage) + "%")
+        print("\n\n\tMean Response Time of all 5 simulations:\t" + str(mean_res_time) + " seconds\n")
