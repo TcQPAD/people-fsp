@@ -50,25 +50,8 @@ class Tile:
 
     def setContent(self, contentEnum):
         self.tileLock.acquire()
-        if not (self.content == TileValueEnum.exit): # to avoid replacing the exit value with a person
-            self.content = contentEnum
+        self.content = contentEnum
         self.tileLock.release()
-
-    """
-    Returns true if the given cell has the given person in it
-    """
-
-    def hasPerson(self, person):
-        self.tileLock.acquire()
-        print"{0}\n".format("Coordinates: " + str(person.x) + " " + str(person.y))
-        hP = self.hasNothingButPerson()
-        self.tileLock.release()
-        return hP
-
-    def hasNothingButPerson(self):
-        return self.content != TileValueEnum.empty \
-               and self.content != TileValueEnum.obstacle \
-               and self.content != TileValueEnum.exit
 
     """
     Returns true if the given person has reached the exit cell
@@ -77,7 +60,6 @@ class Tile:
     def isAtExit(self):
         self.tileLock.acquire()
         tmp = self.content == TileValueEnum.exit
-        print tmp
         self.tileLock.release()
         return tmp
 

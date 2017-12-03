@@ -74,6 +74,9 @@ class Person(threading.Thread):
         # (0,0), (0,1), (1,0), (1,1)
         while not self.algorithm.getMap.isAtExit(self):
             print "{0}\n".format("Moving person... " + str(self.threadId)),
+            print "{0}\n".format(
+                "\tCoordinates: " + str(self._x) + ", " + str(self._y)),
+
             '''
             #Uncomment to desactivate trace    
             if self.algorithm.getDisplay != None :

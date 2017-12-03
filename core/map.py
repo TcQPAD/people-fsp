@@ -43,20 +43,12 @@ class Map:
         return MAP_Y
 
     """
-    Returns true if the given cell has the given person in it
-    """
-
-    def hasPerson(self, person):
-        return self.map[person.x][person.y].hasPerson(person)
-
-    """
     Returns true if the given person has reached an exit cell correspond
     to an exit cell
     """
 
     def isAtExit(self, person):
-        return (person.x == 0 and person.y == 0) or (person.x == 0 and person.y == 1) or (person.x == 1 and person.y == 0) or (person.x == 1 and person.y == 1)
-
+        return self.map[person.x][person.y].isAtExit()
 
     """
     Returns true if the given Tile has an obstacle
@@ -86,34 +78,27 @@ class Map:
 
     def movePerson(self, person):
 
-        if not self.hasPerson(person):
-            raise IndexError("No person exists in the provided cell : (%d, %d)", person.x, person.y)
+        if self.isAtExit(person):
+            return
+
+        # empty the cell
+        self.map[person.x][person.y].setContent(TileValueEnum.empty)
+
+        if person.x > 0 and person.y > 0:
+            self.movePersonX(person)
+            self.movePersonY(person)
 
         else:
-            # empty the cell
-            self.map[person.x][person.y].setContent(TileValueEnum.empty)
-            if person.x > 0:
-                self.movePersonX(person)
-            if person.y > 0:
-                self.movePersonY(person)
 
-            if not self.isAtExit(person):
-                self.map[person.x][person.y].setContent(person)
+            # borders
+            if person.x == 0 and person.y > 0:
+                self.moveAlongX(person)
 
-    """
-    Choose a person's next case to avoid obstacles
-    """
+            if person.x > 0 and person.y == 0:
+                self.moveAlongY(person)
 
-    def choosePersonNextCaseXYPositive(self, person):
-        if not self.isObstacle(person.x - 1, person.y - 1):
-            person.x = person.x - 1
-            person.y = person.y - 1
-        else:
-            if not self.isObstacle(person.x - 1, person.y):
-                person.x = person.x - 1
-            else:
-                if not self.isObstacle(person.x, person.y - 1):
-                    person.y = person.y - 1
+        if not self.isAtExit(person):
+            self.map[person.x][person.y].setContent(person)
 
     """
     Choose a person's next case to avoid obstacles
@@ -123,9 +108,6 @@ class Map:
     def movePersonX(self, person):
         if not self.isObstacle(person.x - 1, person.y):
             person.x -= 1
-        else:
-            if not self.isObstacle(person.x, person.y + 1):
-                person.y += 1
 
     """
     Choose a person's next case to avoid obstacles
@@ -135,6 +117,18 @@ class Map:
     def movePersonY(self, person):
         if not self.isObstacle(person.x, person.y - 1):
             person.y -= 1
+
+    def moveAlongX(self, person):
+        if self.isObstacle(person.x - 1, person.y):
+            person.y += 1
+
+        person.x -= 1
+
+    def moveAlongY(self, person):
+        if self.isObstacle(person.x, person.y - 1):
+            person.x += 1
+
+        person.y -= 1
 
     def fillMap(self):
         self.createBorder()
@@ -147,24 +141,24 @@ class Map:
         On met les bordures nord et sud
         """
         for y in range(MAP_Y + 2):
-            self.map[0][y].setContent(Tile(TileValueEnum.obstacle))
+            self.map[0][y].setContent(TileValueEnum.obstacle)
 
         for y in range(MAP_Y + 2):
-            self.map[511][y].setContent(Tile(TileValueEnum.obstacle))
+            self.map[511][y].setContent(TileValueEnum.obstacle)
 
         """      
         On met les bordures ouest et est
         """
         for x in range(1, MAP_X + 1):
-            self.map[x][0].setContent(Tile(TileValueEnum.obstacle))
+            self.map[x][0].setContent(TileValueEnum.obstacle)
         for x in range(1, MAP_X + 1):
-            self.map[x][127].setContent(Tile(TileValueEnum.obstacle))
+            self.map[x][127].setContent(TileValueEnum.obstacle)
 
     def createExit(self):
-        self.map[0][0].setContent(Tile(TileValueEnum.exit))
-        self.map[0][1].setContent(Tile(TileValueEnum.exit))
-        self.map[1][0].setContent(Tile(TileValueEnum.exit))
-        self.map[1][1].setContent(Tile(TileValueEnum.exit))
+        self.map[0][0].setContent(TileValueEnum.exit)
+        self.map[0][1].setContent(TileValueEnum.exit)
+        self.map[1][0].setContent(TileValueEnum.exit)
+        self.map[1][1].setContent(TileValueEnum.exit)
 
     def createObstacle(self):
         # numberObstacleToGenerate = random.randint(5,9)
@@ -183,7 +177,7 @@ class Map:
     def fillArea(self, x1, y1, x2, y2):
         for x in range(x1, x2):
             for y in range(y1, y2):
-                self.map[x][y].setContent(Tile(TileValueEnum.obstacle))
+                self.map[x][y].setContent(TileValueEnum.obstacle)
 
     def printMap(self):
         for x in range(MAP_X):
