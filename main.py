@@ -25,8 +25,9 @@ def noUI():
     cpuPercent = CpuPercent()
     if args.m:
         cpuPercent.start()
-    map = Map()
-    algorithm = Algorithm(map, nbP)
+
+    map = Map(True if args.m else False)
+    algorithm = Algorithm(map, nbP, None, True if args.m else False)
     algorithm.startAlgo()
     if args.m:
         cpuPercent.stopMeasure()
@@ -44,8 +45,8 @@ def noUI():
 def yesUI():
     print("Starting project with UI!")
     display = Display(512, 128)
-    map = Map(display)
-    algorithm = Algorithm(map, nbP, display)
+    map = Map(True if args.m else False, display)
+    algorithm = Algorithm(map, nbP, display, True if args.m else False)
     algorithm.startAlgo()
     return
 

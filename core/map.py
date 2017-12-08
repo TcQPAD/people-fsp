@@ -13,7 +13,6 @@ from core.obstacle import Obstacle
 from person import Person
 from core.display import Display
 
-
 MAP_X = 512
 MAP_Y = 128
 
@@ -29,11 +28,12 @@ NAME_MAP = "map.txt"
 
 class Map:
 
-    def __init__(self, display=None) :
+    def __init__(self, loadedMap=False, display=None):
         self.personList = []
         self.obstacleList = []
         self.display = display
         self.map = [[Tile(TileValueEnum.empty) for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
+        self.loadedMap = loadedMap
         self.fillMap()
         self.draw()
 
@@ -184,7 +184,7 @@ class Map:
         numberObstacleToGenerate = random.randint(3, 5)
         i = 0
 
-        while (i  < numberObstacleToGenerate ):
+        while i < numberObstacleToGenerate:
             x1 = random.randint(2, MAP_X / 2)
             x2 = random.randint(x1, MAP_X - 3)
 
@@ -197,8 +197,8 @@ class Map:
                 i += 1
                 self.obstacleList.append(obstacle)
 
-    def fillArea(self, x1, y1, x2, y2) :
-        for x in range (x1, x2):
+    def fillArea(self, x1, y1, x2, y2):
+        for x in range(x1, x2):
             for y in range(y1, y2):
                 self.map[x][y].setContent(TileValueEnum.obstacle)
 
@@ -213,48 +213,50 @@ class Map:
             return False
 
         for oneObstacle in self.obstacleList:
-            if obstacle.isInside(oneObstacle) :
+            if obstacle.isInside(oneObstacle):
                 return True
 
         return False
 
     def saveMap(self, persons):
-        file = open(NAME_MAP, "w")
+        fileMap = open(NAME_MAP, "w")
 
         for obstacle in self.obstacleList:
-            file.write(str(obstacle.x1) + " " + str(obstacle.x2) + " " + str(obstacle.y1) + " " + str(obstacle.y2) + "\n")
+            fileMap.write(
+                str(obstacle.x1) + " " + str(obstacle.x2) + " " + str(obstacle.y1) + " " + str(obstacle.y2) + "\n")
 
-        file.write("#\n")
+        fileMap.write("#\n")
 
         for person in persons:
-            file.write(str(person._x) + " " + str(person._y) +  " " + str(person.threadId) + "\n")
+            fileMap.write(str(person.x) + " " + str(person.y) + " " + str(person.threadId) + "\n")
 
-        file.close()
-
+        fileMap.close()
 
     '''
     Load a .txt file containing a map. This file gets the informations about the position of the obstacles and the persons
     '''
+
     def loadMap(self):
-        file = open(NAME_MAP, "r")
-        line = file.readline()
+        fileMap = open(NAME_MAP, "r")
+        line = fileMap.readline()
 
         parseObstacle = True
 
         while line:
             if line == "#\n":
                 parseObstacle = False
-                line = file.readline()
+                line = fileMap.readline()
                 continue
 
             coordonnee = line.split(' ')
             if parseObstacle:
-                self.obstacleList.append(Obstacle(int(coordonnee[0]), int(coordonnee[1]),  int(coordonnee[2]), int(coordonnee[3])))
-            else :
+                self.obstacleList.append(
+                    Obstacle(int(coordonnee[0]), int(coordonnee[1]), int(coordonnee[2]), int(coordonnee[3])))
+            else:
                 self.personList.append(Person(None, int(coordonnee[0]), int(coordonnee[1]), int(coordonnee[2])))
 
-            line = file.readline()
-        file.close()
+            line = fileMap.readline()
+        fileMap.close()
 
     def draw(self):
         print("Draw " + str(len(self.obstacleList)) + " obstacle(s)")

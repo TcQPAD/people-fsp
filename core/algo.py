@@ -16,7 +16,7 @@ of the map
 
 class Algorithm:
 
-    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None, loadMap = True):
+    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None, loadMap=False):
 
         self.loadMap = loadMap
         self.map = map
