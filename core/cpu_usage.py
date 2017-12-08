@@ -100,44 +100,47 @@ class CpuPercent(threading.Thread):
     """
 
     def produce_report(self):
-        with open("res.json", "rb") as res_file:
-            content = res_file.read()
+        try:
+            with open("res.json", "rU") as res_file:
+                content = res_file.read()
 
-        print(content)
-        data = json.loads(content)
+            data = json.loads(content)
 
-        tmp_l_cpu_us = []
-        tmp_l_rt = []
-        mean_cpu_usage = 0
-        cpt_cu = 0
-        cpt_rt = 0
-        run_cpt = 0
+            tmp_l_cpu_us = []
+            tmp_l_rt = []
+            mean_cpu_usage = 0
+            cpt_cu = 0
+            cpt_rt = 0
+            run_cpt = 0
 
-        for x in data:
-            list_us = [float(i) for i in x["run_" + str(run_cpt)]["cpu_usage"].strip('[]').split(',')]
-            for y in list_us:
-                mean_cpu_usage += y
-                cpt_cu += 1
+            for x in data:
+                list_us = [float(i) for i in x["run_" + str(run_cpt)]["cpu_usage"].strip('[]').split(',')]
+                for y in list_us:
+                    mean_cpu_usage += y
+                    cpt_cu += 1
 
-            tmp_l_cpu_us.append(mean_cpu_usage / cpt_cu)
+                tmp_l_cpu_us.append(mean_cpu_usage / cpt_cu)
 
-            tmp_l_rt.append(float(x["run_" + str(run_cpt)]["res_time"]))
-            cpt_rt += 1
-            run_cpt += 1
+                tmp_l_rt.append(float(x["run_" + str(run_cpt)]["res_time"]))
+                cpt_rt += 1
+                run_cpt += 1
 
-        # eliminates the min and max values to keep intermediate values
-        min_v, idx = min((val, idx) for (idx, val) in enumerate(tmp_l_cpu_us))
-        max_v, idx = max((val, idx) for (idx, val) in enumerate(tmp_l_cpu_us))
-        tmp_l_cpu_us.remove(min_v)
-        tmp_l_cpu_us.remove(max_v)
+            # eliminates the min and max values to keep intermediate values
+            min_v, idx = min((val, idx) for (idx, val) in enumerate(tmp_l_cpu_us))
+            max_v, idx = max((val, idx) for (idx, val) in enumerate(tmp_l_cpu_us))
+            tmp_l_cpu_us.remove(min_v)
+            tmp_l_cpu_us.remove(max_v)
 
-        min_v, idx = min((val, idx) for (idx, val) in enumerate(tmp_l_rt))
-        max_v, idx = max((val, idx) for (idx, val) in enumerate(tmp_l_rt))
-        tmp_l_rt.remove(min_v)
-        tmp_l_rt.remove(max_v)
+            min_v, idx = min((val, idx) for (idx, val) in enumerate(tmp_l_rt))
+            max_v, idx = max((val, idx) for (idx, val) in enumerate(tmp_l_rt))
+            tmp_l_rt.remove(min_v)
+            tmp_l_rt.remove(max_v)
 
-        mean_cpu_usage = sum(tmp_l_cpu_us) / 3
-        mean_res_time = sum(tmp_l_rt) / 3
+            mean_cpu_usage = sum(tmp_l_cpu_us) / 3
+            mean_res_time = sum(tmp_l_rt) / 3
 
-        print("\n\n\tMean CPU Usage of all 5 simulations:\t" + str(mean_cpu_usage) + "%")
-        print("\n\n\tMean Response Time of all 5 simulations:\t" + str(mean_res_time) + " seconds\n")
+            print("\n\n\tMean CPU Usage of all 5 simulations:\t" + str(mean_cpu_usage) + "%")
+            print("\n\n\tMean Response Time of all 5 simulations:\t" + str(mean_res_time) + " seconds\n")
+
+        except IOError:
+            print "Could not open file because it's openened by another process!"

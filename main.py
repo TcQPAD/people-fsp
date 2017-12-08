@@ -61,6 +61,10 @@ def noUI():
 
             i += 1
 
+        # need to join cpuPercent to let it finish writing in the file
+        # the results of the last 5th simulation, or there will be a concurrency
+        # problem for the res.json file
+        cpuPercent.join()
         # returns the measurements for the 5 simulations
         cpuPercent.produce_report()
 
