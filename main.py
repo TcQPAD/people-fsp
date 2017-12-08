@@ -137,22 +137,12 @@ if __name__ == '__main__':
                           "It may slow the execution of the program instead of accelerating it !!!\n"
                           "Number of available cores: " + str(nb__logical_cores), UserWarning)
 
-    if args.showUi:
-
-        # create an object that inputs data randomly 
-        if args.showUi == "true":
-
-            if args.m:
-                noUI()
-                exit(0)
-
+    if args.m:
+        noUI()
+        exit(0)
+    elif args.showUi == "true":
             yesUI()
             exit(0)
-
-        else:
-            noUI()
-            exit(0)
-
     else:
         noUI()
         exit(0)
