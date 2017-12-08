@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+from core.first_scenario import FirstScenario
 from core.map import Map
 from core.algo import Algorithm
 from core.display import Display
@@ -28,7 +28,7 @@ def noUI():
         cpuPercent = CpuPercent(0)
 
     map = Map(False)
-    algorithm = Algorithm(map, nbP, None, False)
+    algorithm = FirstScenario(map, nbP, None, False)
 
     if args.m:
         # finished setting up for simulation
@@ -77,7 +77,7 @@ def yesUI():
     print("Starting project with UI!")
     display = Display(512, 128)
     map = Map(True if args.m else False, display)
-    algorithm = Algorithm(map, nbP, display, True if args.m else False)
+    algorithm = FirstScenario(map, nbP, display, True if args.m else False)
     algorithm.startAlgo()
     return
 
