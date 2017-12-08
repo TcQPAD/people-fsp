@@ -81,9 +81,11 @@ class Person(threading.Thread):
         # this person will move until he reaches the exit of the map :
         # (0,0), (0,1), (1,0), (1,1)
         while not self._algorithm.getMap.isAtExit(self):
-            print "{0}\n".format("Moving person... " + str(self.threadId)),
+            # print "{0}\n".format("Moving person... " + str(self.threadId)),
+            '''
             print "{0}\n".format(
                 "\tCoordinates: " + str(self._x) + ", " + str(self._y)),
+            '''
 
             '''
             #Uncomment to desactivate trace    

@@ -22,15 +22,46 @@ nb__logical_cores = ps.cpu_count(True)
 
 def noUI():
     print("Starting project with no UI!")
-    cpuPercent = CpuPercent()
+    cpuPercent = None
+
     if args.m:
+        cpuPercent = CpuPercent(0)
+
+    map = Map(False)
+    algorithm = Algorithm(map, nbP, None, False)
+
+    if args.m:
+        # finished setting up for simulation
+        # start measurements
         cpuPercent.start()
 
-    map = Map(True if args.m else False)
-    algorithm = Algorithm(map, nbP, None, True if args.m else False)
     algorithm.startAlgo()
+
     if args.m:
         cpuPercent.stopMeasure()
+        i = 1
+        while i < 5:
+            # here, we could have used a ThreadPool along
+            # with an executor service to re-use this measurement thread
+            # instead of re-creating one after each simulation.
+            # however, the doc says that for the moment, due to the GLI,
+            # multiprocessing API spawns subprocesses instead of threads, which
+            # is less effective and heavier for the machine
+            # see: https://docs.python.org/2/library/multiprocessing.html
+            cpuPercent = CpuPercent(i)
+
+            map = Map(True)
+            algorithm = Algorithm(map, nbP, None, True)
+
+            cpuPercent.start()
+            algorithm.startAlgo()
+            cpuPercent.stopMeasure()
+
+            print("Finished simulation number " + str(i))
+
+            i += 1
+
+        # returns the measurements for the 5 simulations
         cpuPercent.produce_report()
 
     return
