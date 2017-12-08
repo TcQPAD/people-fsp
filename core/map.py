@@ -7,6 +7,12 @@ import random
 
 from tile import Tile
 from tile_value_enum import TileValueEnum
+import random
+
+from core.obstacle import Obstacle
+from person import Person
+from core.display import Display
+
 
 MAP_X = 512
 MAP_Y = 128
@@ -14,14 +20,22 @@ MAP_Y = 128
 """
 Class to describe the map
 """
+NAME_MAP = "map.txt"
+
+'''
+    Class to describe the map
+'''
 
 
 class Map:
 
-    def __init__(self, display=None):
+    def __init__(self, display=None) :
+        self.personList = []
+        self.obstacleList = []
         self.display = display
         self.map = [[Tile(TileValueEnum.empty) for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
         self.fillMap()
+        self.draw()
 
     """
     Returns true if the given cell contains a person
@@ -133,7 +147,13 @@ class Map:
     def fillMap(self):
         self.createBorder()
         self.createExit()
-        self.createObstacle()
+
+        if not self.loadedMap:
+            print("Map : created" + str(self.loadedMap))
+            self.createObstacle()
+        else:
+            print("Map : load")
+            self.loadMap()
 
     def createBorder(self):
 
@@ -161,21 +181,24 @@ class Map:
         self.map[1][1].setContent(TileValueEnum.exit)
 
     def createObstacle(self):
-        # numberObstacleToGenerate = random.randint(5,9)
-        numberObstacleToGenerate = 1
-        for i in range(numberObstacleToGenerate):
+        numberObstacleToGenerate = random.randint(3, 5)
+        i = 0
+
+        while (i  < numberObstacleToGenerate ):
             x1 = random.randint(2, MAP_X / 2)
             x2 = random.randint(x1, MAP_X - 3)
 
             y1 = random.randint(4, MAP_Y / 2)
             y2 = random.randint(y1, MAP_Y - 2)
-            self.fillArea(x1, y1, x2, y2)
 
-            if self.display is not None:
-                self.display.drawObstacle(x1, y1, x2, y2)
+            obstacle = Obstacle(x1, x2, y1, y2)
 
-    def fillArea(self, x1, y1, x2, y2):
-        for x in range(x1, x2):
+            if not self.checkCoordonnee(obstacle):
+                i += 1
+                self.obstacleList.append(obstacle)
+
+    def fillArea(self, x1, y1, x2, y2) :
+        for x in range (x1, x2):
             for y in range(y1, y2):
                 self.map[x][y].setContent(TileValueEnum.obstacle)
 
@@ -184,3 +207,64 @@ class Map:
             for y in range(MAP_Y):
                 print(self.map[x][y].getContent(), end='')
             print('\n', end='')
+
+    def checkCoordonnee(self, obstacle):
+        if not self.obstacleList:
+            return False
+
+        for oneObstacle in self.obstacleList:
+            if obstacle.isInside(oneObstacle) :
+                return True
+
+        return False
+
+    def saveMap(self, persons):
+        file = open(NAME_MAP, "w")
+
+        for obstacle in self.obstacleList:
+            file.write(str(obstacle.x1) + " " + str(obstacle.x2) + " " + str(obstacle.y1) + " " + str(obstacle.y2) + "\n")
+
+        file.write("#\n")
+
+        for person in persons:
+            file.write(str(person._x) + " " + str(person._y) +  " " + str(person.threadId) + "\n")
+
+        file.close()
+
+
+    '''
+    Load a .txt file containing a map. This file gets the informations about the position of the obstacles and the persons
+    '''
+    def loadMap(self):
+        file = open(NAME_MAP, "r")
+        line = file.readline()
+
+        parseObstacle = True
+
+        while line:
+            if line == "#\n":
+                parseObstacle = False
+                line = file.readline()
+                continue
+
+            coordonnee = line.split(' ')
+            if parseObstacle:
+                self.obstacleList.append(Obstacle(int(coordonnee[0]), int(coordonnee[1]),  int(coordonnee[2]), int(coordonnee[3])))
+            else :
+                self.personList.append(Person(None, int(coordonnee[0]), int(coordonnee[1]), int(coordonnee[2])))
+
+            line = file.readline()
+        file.close()
+
+    def draw(self):
+        print("Draw " + str(len(self.obstacleList)) + " obstacle(s)")
+
+        for obstacle in self.obstacleList:
+            self.fillArea(obstacle.x1, obstacle.x2, obstacle.y1, obstacle.y2)
+
+            if self.display is not None:
+                self.display.drawObstacle(obstacle.x1, obstacle.y1, obstacle.x2, obstacle.y2)
+
+    @property
+    def getPersons(self):
+        return self.personList

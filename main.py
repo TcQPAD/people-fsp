@@ -32,8 +32,6 @@ def noUI():
         cpuPercent.stopMeasure()
         cpuPercent.produce_report()
 
-
-
     return
 
 
