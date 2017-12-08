@@ -16,7 +16,7 @@ class Person(threading.Thread) :
     """
     def __init__(self, algorithm, x, y, threadId):
         threading.Thread.__init__(self)
-        self.algorithm = algorithm
+        self._algorithm = algorithm
         self.threadId = threadId
 
         '''
@@ -41,6 +41,14 @@ class Person(threading.Thread) :
     @property
     def y(self):
         return self._y
+
+    @property
+    def algorithm(self):
+        return self._algorithm
+
+    @algorithm.setter
+    def algorithm(self, algorithm):
+        self._algorithm = algorithm
 
 
     @x.setter
@@ -69,18 +77,18 @@ class Person(threading.Thread) :
     def run(self) :
         # this person will move until he reaches the exit of the map :
         # (0,0), (0,1), (1,0), (1,1)
-        while not self.algorithm.getMap.isAtExit(self) :
+        while not self._algorithm.getMap.isAtExit(self) :
             print "{0}\n".format("Moving person... " + str(self.threadId)),
             '''
             #Uncomment to desactivate trace    
             if self.algorithm.getDisplay != None :
                 self.algorithm.getDisplay.erasePerson(self._x, self._y)
             '''
-            self.algorithm.getMap.movePerson(self)
-            if self.algorithm.getDisplay != None :
-                self.algorithm.getDisplay.drawPerson(self._x, self._y)
+            self._algorithm.getMap.movePerson(self)
+            if self._algorithm.getDisplay != None :
+                self._algorithm.getDisplay.drawPerson(self._x, self._y)
     
-        if not self.algorithm.getMap.isAtExit(self) :
+        if not self._algorithm.getMap.isAtExit(self) :
             print "{0}\n".format("Person not at exit: " + str(self.threadId) + "\t, coordinates: " + str(self._x) + ", " + str(self._y)),
             raise Exception("Some persons didn't reach the exit of the map")
         else :

@@ -114,6 +114,12 @@ class Algorithm:
                 self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
                 i += 1
             self.map.saveMap(self.persons)
+
+        else:
+            self.persons = self.map.personList
+
+            print(str(len(self.persons)) + " person(s) loaded")
+
     '''
     Simulates the movement of 
     2^peopleNumber persons to the upper left corner

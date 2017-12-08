@@ -24,6 +24,7 @@ NAME_MAP = "map.txt"
 class Map:
 
     def __init__(self, loadedMap, display=None) :
+        self.personList = []
         self.obstacleList = []
         self.display = display
         self.map = [[Tile(TileValueEnum.empty) for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
@@ -197,17 +198,19 @@ class Map:
         file.write("#\n")
 
         for person in persons:
-            file.write(str(person._x) + " " + str(person._y) + "\n")
+            file.write(str(person._x) + " " + str(person._y) +  " " + str(person.threadId) + "\n")
 
         file.close()
 
+
+    '''
+    Load a .txt file containing a map. This file gets the informations about the position of the obstacles and the persons
+    '''
     def loadMap(self):
         file = open(NAME_MAP, "r")
         line = file.readline()
 
         parseObstacle = True
-
-        personList = []
 
 
         while line:
@@ -220,11 +223,10 @@ class Map:
             if(parseObstacle):
                 self.obstacleList.append(Obstacle(int(coordonnee[0]), int(coordonnee[1]),  int(coordonnee[2]), int(coordonnee[3])))
             else :
-                personList.append(Person(None, int(coordonnee[0]), int(coordonnee[1]), None))
+                self.personList.append(Person(None, int(coordonnee[0]), int(coordonnee[1]), int(coordonnee[2])))
 
             line = file.readline()
         file.close()
-
 
     def draw(self):
         print("Draw " + str(len(self.obstacleList)) + " obstacle(s)")
@@ -235,4 +237,6 @@ class Map:
             if self.display != None :
                 self.display.drawObstacle(obstacle.x1, obstacle.y1, obstacle.x2, obstacle.y2)
 
-
+    @property
+    def getPersons(self):
+        return self.personList
