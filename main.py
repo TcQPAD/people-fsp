@@ -109,6 +109,15 @@ if __name__ == '__main__':
              "du programme."
     )
 
+    parser.add_argument(
+        "-t",
+        type=int,
+        default=0,
+        help="Scenario à exécuter. 0 ou 1."
+    )
+
+
+
     # récupère les arguments dans un objet (appelable comme un struct en C)
     args = parser.parse_args()
 
