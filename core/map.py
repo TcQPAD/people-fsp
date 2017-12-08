@@ -5,13 +5,10 @@ from __future__ import print_function
 
 import random
 
-from tile import Tile
-from tile_value_enum import TileValueEnum
-import random
-
 from core.obstacle import Obstacle
 from person import Person
-from core.display import Display
+from tile import Tile
+from tile_value_enum import TileValueEnum
 
 MAP_X = 512
 MAP_Y = 128
