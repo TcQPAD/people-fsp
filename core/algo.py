@@ -109,6 +109,9 @@ class Algorithm:
         else:
             self.persons = self.map.personList
 
+            for (i, person) in enumerate(self.persons):
+                person.algorithm = self
+
             print(str(len(self.persons)) + " person(s) loaded")
 
     '''
