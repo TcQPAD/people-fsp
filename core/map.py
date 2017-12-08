@@ -196,6 +196,9 @@ class Map:
             if not self.checkCoordonnee(obstacle):
                 i += 1
                 self.obstacleList.append(obstacle)
+                for x in range(x1, x2):
+                    for y in range(y1, y2):
+                        self.map[x][y].setContent(TileValueEnum.obstacle)
 
     def fillArea(self, x1, y1, x2, y2):
         for x in range(x1, x2):
