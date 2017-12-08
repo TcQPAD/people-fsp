@@ -57,8 +57,7 @@ class SecondScenario(Algorithm):
                         )
                         randomPickCoord = choice(randomCoordinates)
                         randomCoordinates.remove(randomPickCoord)
-                zone = self.defineZone(randomCoordinates[0], randomCoordinates[1])
-                print("Zone " + zone)
+                zone = self.defineZone(randomPickCoord[0], randomPickCoord[1])
                 self.persons.append(Person(self, randomPickCoord[0], randomPickCoord[1], zone))
                 self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
                 i += 1
@@ -94,8 +93,8 @@ class SecondScenario(Algorithm):
             sys.exit()
 
     def defineZone(self, xPerson, yPerson):
-        if(0 < xPerson < self.map.getSizeX()):
-            if 0 < yPerson < self.map.getSizeY() / 2:
+        if 0 < xPerson < self.map.getSizeX() / 2:
+            if 0 < yPerson< self.map.getSizeY() / 2:
                 return 0
             else:
                 return 2

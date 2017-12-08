@@ -12,6 +12,8 @@ import math
 
 # gets the number of physical AND logical cores
 # available on the current machine
+from core.second_scenario import SecondScenario
+
 nb__logical_cores = ps.cpu_count(True)
 
 '''
@@ -28,7 +30,7 @@ def noUI():
         cpuPercent = CpuPercent(0)
 
     map = Map(False)
-    algorithm = FirstScenario(map, nbP, None, False)
+    algorithm = FirstScenario(map, nbP, None, False) if args.t == 0 else SecondScenario(map, nbP, None, False)
 
     if args.m:
         # finished setting up for simulation
@@ -51,7 +53,7 @@ def noUI():
             cpuPercent = CpuPercent(i)
 
             map = Map(True)
-            algorithm = Algorithm(map, nbP, None, True)
+            algorithm = Algorithm(map, nbP, None, True) if args.t == 0 else SecondScenario(map, nbP, None, False)
 
             cpuPercent.start()
             algorithm.startAlgo()
@@ -77,7 +79,7 @@ def yesUI():
     print("Starting project with UI!")
     display = Display(512, 128)
     map = Map(True if args.m else False, display)
-    algorithm = FirstScenario(map, nbP, display, True if args.m else False)
+    algorithm = FirstScenario(map, nbP, display, True if args.m else False) if args.t == 0 else SecondScenario(map, nbP, display, True if args.m else False)
     algorithm.startAlgo()
     return
 
