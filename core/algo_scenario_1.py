@@ -65,9 +65,9 @@ class AlgorithmScenarioOne(Algorithm):
 
     def setUp(self):
         p = math.pow(2, self.peopleNumber)
-        print("Setting up %d threads and distributing %d persons", p, p)
+        print("Setting up " + str(p) + " threads and distributing " + str(p) +  " persons")
         self.setUpMap()
-        print("Finished setting up threads and distributing %d persons in the map", self.peopleNumber)
+        print("Finished setting up threads and distributing " + str(self.peopleNumber) + " persons in the map")
 
     '''
     Creates N threads representing people,

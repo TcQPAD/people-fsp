@@ -15,6 +15,23 @@ import math
 # available on the current machine
 nb__logical_cores = ps.cpu_count(True)
 
+"""
+    Overrides the default warnings.showwarning()
+    function from the warnings package
+    We need to override it because warning.warn() prints 
+    the Python code of the warning to the user
+    
+    Here, we only return the msg of the warning and NOT the Python code
+    
+    see: https://stackoverflow.com/questions/2187269/python-print-only-the-message-on-warnings
+"""
+
+
+def custom_formatwarning(msg, *a):
+    # ignore everything except the message
+    return str(msg) + '\n'
+
+
 '''
     Starts the project by outputting information about the processes only,
     without UI. 
@@ -58,7 +75,7 @@ def noUI():
             algorithm.startAlgo()
             cpuPercent.stopMeasure()
 
-            print("Finished simulation number " + str(i))
+            print("Finished simulation number " + str(i + 1))
 
             i += 1
 
@@ -109,7 +126,7 @@ if __name__ == '__main__':
 
     parser.add_argument(
         "-m",
-        action = "store_true", # to tell that this option has no value
+        action="store_true",  # to tell that this option has no value
         help="Si donné comme argument du programme, affiche des statistiques du CPU sur la sortie standard à la fin de l'exécution"
              "du programme."
     )
@@ -124,14 +141,15 @@ if __name__ == '__main__':
             nbP = args.p
 
         else:
-            raise Exception("Too many people provided with -p. Max value is : " + str(512*128))
+            raise Exception("Too many people provided with -p. Max value is : " + str(512 * 128))
 
         # more threads than CPU cores, raise a warning
         # because program may be slower than expected
         if math.pow(2, args.p) > nb__logical_cores:
-            warnings.warn("Provided number of threads is > to number of available cores\n"
-                          "It may slow the execution of the program instead of accelerating it !!!\n"
-                          "Number of available cores: " + str(nb__logical_cores), UserWarning)
+            warnings.formatwarning = custom_formatwarning
+            warn_msg = "\nProvided number of threads is > to number of available cores\nIt may slow the execution of the program instead of accelerating it !!!\nNumber of available cores: " + str(
+                nb__logical_cores) + "\n"
+            warnings.warn(warn_msg, UserWarning)
 
     if args.showUi:
 
