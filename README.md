@@ -1,5 +1,19 @@
 # Librairies à télécharger pour faire tourner le projet:
 
+Afin d'installer les librairies suivantes, veuillez ouvrir un terminal et entrer:
+
+`sudo pip install lib_name`
+
+Exemple pour **psutil** :
+
+`sudo pip install psutil`
+
+Si vous êtes sur un environnement **Windows**, il suffit de :
+
+`Ouvrir un terminal et taper : python`
+`Dans le prompt python, taper: import pip`
+`Si il n'y a aucune erreur d'import, sortir du prompt python et taper: python -m pip lib_name`
+
 [psutil](https://code.google.com/archive/p/psutil/downloads)
 
 
