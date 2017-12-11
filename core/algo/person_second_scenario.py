@@ -1,18 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import threading  # to introduce parallelism
+from threading import Lock  # to introduce parallelism
 
-from core.person_abstract import AbstractPerson
+from core.algo.person_abstract import AbstractPerson
 
 '''
 Represents a person in the simulation. This class
-extends the Thread class, in order to make all persons
-in the simulation move independently and at the same time.
+doesn't extend the Thread class, because it will be the map that will be threaded.
+This class is just a "shared resource" used by the different threads of the map
+and thus should be thread safe
 '''
 
 
-class PersonFirstScenario(threading.Thread, AbstractPerson):
+class PersonSecondScenario(AbstractPerson):
     """
     Initializes this object, and the Thread
     that will be used to perform the simulation
@@ -20,11 +21,11 @@ class PersonFirstScenario(threading.Thread, AbstractPerson):
 
     def __init__(self, algorithm, x, y, threadId, barrier=None):
         AbstractPerson.__init__(self, algorithm, x, y, threadId)
-        threading.Thread.__init__(self)
 
         # place a barrier so this person
         # waits the other ones
         self.barrier = barrier
+        self.lock = Lock()
 
     '''
     Returns the x coordinate of this person
@@ -32,7 +33,10 @@ class PersonFirstScenario(threading.Thread, AbstractPerson):
 
     @property
     def x(self):
-        return self._x
+        self.lock.acquire()
+        tmp = self._x
+        self.lock.release()
+        return tmp
 
     '''
     Returns the y coordinate of this person
@@ -40,23 +44,35 @@ class PersonFirstScenario(threading.Thread, AbstractPerson):
 
     @property
     def y(self):
-        return self._y
+        self.lock.acquire()
+        tmp = self._y
+        self.lock.release()
+        return tmp
 
     @property
     def algorithm(self):
-        return self._algorithm
+        self.lock.acquire()
+        tmp = self._algorithm
+        self.lock.release()
+        return tmp
 
     @algorithm.setter
     def algorithm(self, algorithm):
+        self.lock.acquire()
         self._algorithm = algorithm
+        self.lock.release()
 
     @x.setter
     def x(self, x):
+        self.lock.acquire()
         self._x = x
+        self.lock.release()
 
     @y.setter
     def y(self, y):
+        self.lock.acquire()
         self._y = y
+        self.lock.release()
 
     '''
     Defines the behaviour of this Thread, i.e.,

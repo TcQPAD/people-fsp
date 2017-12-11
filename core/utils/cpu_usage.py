@@ -1,10 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import threading
-import psutil as ps
-import time  # to sleep!
 import json
+import threading
+import time  # to sleep!
+
+import psutil as ps
 
 """
 Class that can measure CPU usage during the execution of the algorithm,

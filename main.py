@@ -1,17 +1,19 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from core.first_scenario import FirstScenario
-from core.map import Map
-from core.display import Display
-from core.cpu_usage import CpuPercent
+
+import math
+import warnings
 
 import psutil as ps
-import warnings
-import math
 
+from core.algo.first_scenario import FirstScenario
 # gets the number of physical AND logical cores
 # available on the current machine
-from core.second_scenario import SecondScenario
+from core.algo.second_scenario import SecondScenario
+from core.map.map_first_scenario import MapFirstScenario
+from core.map.map_second_scenario import MapSecondScenario
+from core.utils.cpu_usage import CpuPercent
+from core.utils.display import Display
 
 nb__logical_cores = ps.cpu_count(True)
 
@@ -28,7 +30,7 @@ def noUI():
     if args.m:
         cpuPercent = CpuPercent(0)
 
-    map = Map(nbP, False)
+    map = MapFirstScenario(nbP, False) if args.t == 0 else MapSecondScenario()
     algorithm = FirstScenario(map, nbP, None, False) if args.t == 0 else SecondScenario(map, nbP, None, False)
 
     if args.m:
@@ -51,7 +53,7 @@ def noUI():
             # see: https://docs.python.org/2/library/multiprocessing.html
             cpuPercent = CpuPercent(i)
 
-            map = Map(nbP, True)
+            map = MapFirstScenario(nbP, True) if args.t == 0 else MapSecondScenario()
             algorithm = FirstScenario(map, nbP, None, True) if args.t == 0 else SecondScenario(map, nbP, None, False)
 
             cpuPercent.start()
@@ -81,7 +83,7 @@ def noUI():
 def yesUI():
     print("Starting project with UI!")
     display = Display(512, 128)
-    map = Map(nbP, True if args.m else False, display)
+    map = MapFirstScenario(nbP, True if args.m else False, display) if args.t == 0 else MapSecondScenario()
     algorithm = FirstScenario(map, nbP, display, True if args.m else False) if args.t == 0 else SecondScenario(map, nbP,
                                                                                                                display,
                                                                                                                True if args.m else False)

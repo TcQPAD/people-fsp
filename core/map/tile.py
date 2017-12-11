@@ -13,11 +13,13 @@ all the people on the map (where each person
 is actually represented by a Thread).
 """
 
-from tile_value_enum import TileValueEnum
 from threading import Lock  # to synchronize threads
 
+from abstract_tile import AbstractTile
+from core.constants.tile_value_enum import TileValueEnum
 
-class Tile:
+
+class Tile(AbstractTile):
     """
     contentEnum can be one of the following :
     empty = 0
@@ -32,7 +34,7 @@ class Tile:
         The object that will do the magic to synchronize the calling threads,
         i.e., the Person objects.
         """
-        self.content = contentEnum
+        super(Tile, self).__init__(contentEnum)
         self.tileLock = Lock()
 
     """

@@ -5,14 +5,11 @@ from __future__ import print_function
 
 import random
 
+from abstract_map import AbstractMap
 from concurrency.barrier import Barrier
-from core.obstacle import Obstacle
-from person_first_scenario import PersonFirstScenario
-from tile import Tile
-from tile_value_enum import TileValueEnum
-
-MAP_X = 512
-MAP_Y = 128
+from core.constants.tile_value_enum import TileValueEnum
+from core.map.obstacle import Obstacle
+from core.threads.person_first_scenario import PersonFirstScenario
 
 """
 Class to describe the map
@@ -24,15 +21,16 @@ NAME_MAP = "map.txt"
 '''
 
 
-class Map:
+class MapFirstScenario(AbstractMap):
 
     def __init__(self, peopleNumber, loadedMap=False, display=None):
+        super(MapFirstScenario, self).__init__()
+
         self.personList = []
         self.peopleNumber = peopleNumber
         self.barrier = Barrier(self.peopleNumber)
         self.obstacleList = []
         self.display = display
-        self.map = [[Tile(TileValueEnum.empty) for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
         self.loadedMap = loadedMap
         self.fillMap()
         self.draw()
@@ -51,10 +49,10 @@ class Map:
         self.map[x][y].setContent(val)
 
     def getSizeX(self):
-        return MAP_X
+        return self.MAP_X
 
     def getSizeY(self):
-        return MAP_Y
+        return self.MAP_Y
 
     """
     Returns true if the given person has reached an exit cell correspond
@@ -160,18 +158,18 @@ class Map:
         """
         On met les bordures nord et sud
         """
-        for y in range(MAP_Y + 2):
+        for y in range(self.MAP_Y + 2):
             self.map[0][y].setContent(TileValueEnum.obstacle)
 
-        for y in range(MAP_Y + 2):
+        for y in range(self.MAP_Y + 2):
             self.map[511][y].setContent(TileValueEnum.obstacle)
 
         """      
         On met les bordures ouest et est
         """
-        for x in range(1, MAP_X + 1):
+        for x in range(1, self.MAP_X + 1):
             self.map[x][0].setContent(TileValueEnum.obstacle)
-        for x in range(1, MAP_X + 1):
+        for x in range(1, self.MAP_X + 1):
             self.map[x][127].setContent(TileValueEnum.obstacle)
 
     def createExit(self):
@@ -185,11 +183,11 @@ class Map:
         i = 0
 
         while i < numberObstacleToGenerate:
-            x1 = random.randint(2, MAP_X / 2)
-            x2 = random.randint(x1, MAP_X - 3)
+            x1 = random.randint(2, self.MAP_X / 2)
+            x2 = random.randint(x1, self.MAP_X - 3)
 
-            y1 = random.randint(4, MAP_Y / 2)
-            y2 = random.randint(y1, MAP_Y - 2)
+            y1 = random.randint(4, self.MAP_Y / 2)
+            y2 = random.randint(y1, self.MAP_Y - 2)
 
             obstacle = Obstacle(x1, x2, y1, y2)
 
@@ -206,8 +204,8 @@ class Map:
                 self.map[x][y].setContent(TileValueEnum.obstacle)
 
     def printMap(self):
-        for x in range(MAP_X):
-            for y in range(MAP_Y):
+        for x in range(self.MAP_X):
+            for y in range(self.MAP_Y):
                 print(self.map[x][y].getContent(), end='')
             print('\n', end='')
 

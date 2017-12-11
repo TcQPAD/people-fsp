@@ -4,8 +4,9 @@
 import sys
 from random import randint, choice
 
-from core.algo import Algorithm
-from core.person_second_scenario import PersonSecondScenario
+from concurrency.barrier import Barrier
+from core.algo.algo import Algorithm
+from core.threads.person_first_scenario import PersonFirstScenario
 
 DEFAULT_PEOPLE_NUMBER = 4
 
@@ -15,10 +16,14 @@ of the map
 '''
 
 
-class SecondScenario(Algorithm):
+class FirstScenario(Algorithm):
 
     def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None, loadMap=False):
         Algorithm.__init__(self, map, peopleNumber, display, loadMap)
+
+        # a barrier for all the people,
+        # that will ensure that all people work at the same time!
+        self.barrier = Barrier(self.peopleNumber)
 
     '''
     Creates N threads representing people,
@@ -31,8 +36,7 @@ class SecondScenario(Algorithm):
 
         # generates a list of random tuples representing random (x, y) coordinates
         if not self.loadMap:
-            randomCoordinates = [(randint(0, self.map.getSizeX() - 1), randint(0, self.map.getSizeY() - 1)) for k in
-                                 range(int(self.peopleNumber))]
+            randomCoordinates = [(randint(0, self.map.getSizeX() - 1), randint(0, self.map.getSizeY() - 1)) for k in range(int(self.peopleNumber))]
             while i < self.peopleNumber:
                 print("Creating and placing new person")
 
@@ -53,8 +57,8 @@ class SecondScenario(Algorithm):
                         )
                         randomPickCoord = choice(randomCoordinates)
                         randomCoordinates.remove(randomPickCoord)
-                zone = self.defineZone(randomPickCoord[0], randomPickCoord[1])
-                self.persons.append(PersonSecondScenario(self, randomPickCoord[0], randomPickCoord[1], i, zone))
+
+                self.persons.append(PersonFirstScenario(self, randomPickCoord[0], randomPickCoord[1], i, self.barrier))
                 self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
                 i += 1
 
@@ -87,30 +91,3 @@ class SecondScenario(Algorithm):
         except(KeyboardInterrupt, SystemExit):
             print '\n! Received keyboard interrupt, quitting threads.\n'
             sys.exit()
-
-    """
-    Places the person with the given coordinate in a zone.
-    
-    A zone is noted from 0 to 3, and are placed as this :
-    
-    _________________________
-    
-    |           |           |
-    |    0      |     1     |
-    |           |           |
-    | --------------------- |
-    |           |           |
-    |    2      |     3     |
-    |           |           |
-    _________________________
-    """
-    def defineZone(self, xPerson, yPerson):
-        if 0 < xPerson < self.map.getSizeX() / 2:
-            if 0 < yPerson < self.map.getSizeY() / 2:
-                return 0
-            else:
-                return 2
-        elif 0 < yPerson < self.map.getSizeY() / 2:
-            return 1
-        else:
-            return 3
