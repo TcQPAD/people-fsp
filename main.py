@@ -28,7 +28,7 @@ def noUI():
     if args.m:
         cpuPercent = CpuPercent(0)
 
-    map = Map(False)
+    map = Map(nbP, False)
     algorithm = FirstScenario(map, nbP, None, False) if args.t == 0 else SecondScenario(map, nbP, None, False)
 
     if args.m:
@@ -51,7 +51,7 @@ def noUI():
             # see: https://docs.python.org/2/library/multiprocessing.html
             cpuPercent = CpuPercent(i)
 
-            map = Map(True)
+            map = Map(nbP, True)
             algorithm = FirstScenario(map, nbP, None, True) if args.t == 0 else SecondScenario(map, nbP, None, False)
 
             cpuPercent.start()
@@ -81,8 +81,10 @@ def noUI():
 def yesUI():
     print("Starting project with UI!")
     display = Display(512, 128)
-    map = Map(True if args.m else False, display)
-    algorithm = FirstScenario(map, nbP, display, True if args.m else False) if args.t == 0 else SecondScenario(map, nbP, display, True if args.m else False)
+    map = Map(nbP, True if args.m else False, display)
+    algorithm = FirstScenario(map, nbP, display, True if args.m else False) if args.t == 0 else SecondScenario(map, nbP,
+                                                                                                               display,
+                                                                                                               True if args.m else False)
     algorithm.startAlgo()
     return
 
@@ -109,7 +111,7 @@ if __name__ == '__main__':
 
     parser.add_argument(
         "-m",
-        action = "store_true", # to tell that this option has no value
+        action="store_true",  # to tell that this option has no value
         help="Si donné comme argument du programme, affiche des statistiques du CPU sur la sortie standard à la fin de l'exécution"
              "du programme."
     )
@@ -121,9 +123,8 @@ if __name__ == '__main__':
         help="Scenario à exécuter. 0 ou 1."
     )
 
-
-
-    # récupère les arguments dans un objet (appelable comme un struct en C)
+    # data structure with the argument (dictionary) that will be easily
+    # usable
     args = parser.parse_args()
 
     nbP = 4
@@ -133,7 +134,7 @@ if __name__ == '__main__':
             nbP = math.pow(2, args.p)
 
         else:
-            raise Exception("Too many people provided with -p. Max value is : " + str(512*128))
+            raise Exception("Too many people provided with -p. Max value is : " + str(512 * 128))
 
         # more threads than CPU cores, raise a warning
         # because program may be slower than expected
@@ -146,8 +147,8 @@ if __name__ == '__main__':
         noUI()
         exit(0)
     elif args.showUi == "true":
-            yesUI()
-            exit(0)
+        yesUI()
+        exit(0)
     else:
         noUI()
         exit(0)

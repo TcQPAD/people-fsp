@@ -10,6 +10,8 @@ from person import Person
 from tile import Tile
 from tile_value_enum import TileValueEnum
 
+from concurrency.barrier import Barrier
+
 MAP_X = 512
 MAP_Y = 128
 
@@ -25,8 +27,10 @@ NAME_MAP = "map.txt"
 
 class Map:
 
-    def __init__(self, loadedMap=False, display=None):
+    def __init__(self, peopleNumber, loadedMap=False, display=None):
         self.personList = []
+        self.peopleNumber = peopleNumber
+        self.barrier = Barrier(self.peopleNumber)
         self.obstacleList = []
         self.display = display
         self.map = [[Tile(TileValueEnum.empty) for y in range(MAP_Y + 2)] for x in range(MAP_X + 2)]
@@ -253,7 +257,7 @@ class Map:
                 self.obstacleList.append(
                     Obstacle(int(coordonnee[0]), int(coordonnee[1]), int(coordonnee[2]), int(coordonnee[3])))
             else:
-                self.personList.append(Person(None, int(coordonnee[0]), int(coordonnee[1]), int(coordonnee[2])))
+                self.personList.append(Person(None, int(coordonnee[0]), int(coordonnee[1]), int(coordonnee[2]), self.barrier))
 
             line = fileMap.readline()
         fileMap.close()

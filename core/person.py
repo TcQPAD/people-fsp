@@ -16,10 +16,14 @@ class Person(threading.Thread):
     that will be used to perform the simulation
     """
 
-    def __init__(self, algorithm, x, y, threadId):
+    def __init__(self, algorithm, x, y, threadId, barrier=None):
         threading.Thread.__init__(self)
         self._algorithm = algorithm
         self.threadId = threadId
+
+        # place a barrier so this person
+        # waits the other ones
+        self.barrier = barrier
 
         '''
         The object that will do the magic to synchronize the calling threads.
@@ -78,6 +82,10 @@ class Person(threading.Thread):
     '''
 
     def run(self):
+
+        # wait all people or the race is unfair!
+        self.barrier.wait()
+
         # this person will move until he reaches the exit of the map :
         # (0,0), (0,1), (1,0), (1,1)
         while not self._algorithm.getMap.isAtExit(self):

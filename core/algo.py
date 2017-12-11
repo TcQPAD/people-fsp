@@ -1,12 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import math  # To use math.pow(x,y) = x^y
 from abc import ABCMeta, abstractmethod
 
-from core.person import Person
-from random import randint, choice
-import sys
 DEFAULT_PEOPLE_NUMBER = 4
 
 '''
@@ -62,9 +58,9 @@ class Algorithm:
     '''
 
     def setUp(self):
-        print("Setting up %d threads and distributing %d persons", p, p)
+        print("Setting up " + str(self.peopleNumber) + " threads and distributing " + str(self.peopleNumber) + " persons")
         self.setUpMap()
-        print("Finished setting up threads and distributing %d persons in the map", self.peopleNumber)
+        print("Finished setting up threads and distributing " + str(self.peopleNumber) + " persons in the map")
 
     '''
     Creates N threads representing people,

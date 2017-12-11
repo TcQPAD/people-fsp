@@ -1,15 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import math  # To use math.pow(x,y) = x^y
+import sys
+from random import randint, choice
 
+from concurrency.barrier import Barrier
 from core.algo import Algorithm
 from core.person import Person
 
-from concurrency.barrier import Barrier
-
-from random import randint, choice
-import sys
 DEFAULT_PEOPLE_NUMBER = 4
 
 '''
@@ -22,6 +20,10 @@ class FirstScenario(Algorithm):
 
     def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None, loadMap=False):
         Algorithm.__init__(self, map, peopleNumber, display, loadMap)
+
+        # a barrier for all the people,
+        # that will ensure that all people work at the same time!
+        self.barrier = Barrier(self.peopleNumber)
 
     '''
     Creates N threads representing people,
@@ -56,7 +58,7 @@ class FirstScenario(Algorithm):
                         randomPickCoord = choice(randomCoordinates)
                         randomCoordinates.remove(randomPickCoord)
 
-                self.persons.append(Person(self, randomPickCoord[0], randomPickCoord[1], i))
+                self.persons.append(Person(self, randomPickCoord[0], randomPickCoord[1], i, self.barrier))
                 self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
                 i += 1
 

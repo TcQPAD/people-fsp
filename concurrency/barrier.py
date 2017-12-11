@@ -29,6 +29,7 @@ class Barrier:
         # opens the barrier if N threads
         # are waiting
         if self.count == self.n:
+            print("Everyone reached the barrier!")
             self.barrier.release()
         self.barrier.acquire()
         self.barrier.release()
