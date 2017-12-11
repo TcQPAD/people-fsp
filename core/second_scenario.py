@@ -89,6 +89,22 @@ class SecondScenario(Algorithm):
             print '\n! Received keyboard interrupt, quitting threads.\n'
             sys.exit()
 
+    """
+    Places the person with the given coordinate in a zone.
+    
+    A zone is noted from 0 to 3, and are placed as this :
+    
+    _________________________
+    
+    |           |           |
+    |    0      |     1     |
+    |           |           |
+    | --------------------- |
+    |           |           |
+    |    2      |     3     |
+    |           |           |
+    _________________________
+    """
     def defineZone(self, xPerson, yPerson):
         if 0 < xPerson < self.map.getSizeX() / 2:
             if 0 < yPerson < self.map.getSizeY() / 2:
