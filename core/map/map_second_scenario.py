@@ -3,7 +3,6 @@
 
 from abstract_map import AbstractMap
 from core.constants.tile_value_enum import TileValueEnum
-from core.threads.map_zone import MapZone
 
 from tile import Tile
 from tile_not_thread_safe import TileNotThreadSafe
@@ -20,20 +19,10 @@ class MapSecondScenario(AbstractMap):
         super(MapSecondScenario, self).__init__(loadedMap, display)
         self.map = [[TileNotThreadSafe(TileValueEnum.empty) for y in range(self.MAP_Y + 2)] for x in
                     range(self.MAP_X + 2)]
-        self.nb_zones = 4
-        self.map_zones = []
         self.loadedMap = loadedMap
         self.display = display
         self.fillMap()
         self.draw()
-        self.setUpMap()
-
-    def setUpMap(self):
-        # init map zones
-        i = 1
-        while i < self.nb_zones:
-            self.map_zones.append(MapZone(self, i - 1))
-
         self.lockBorderTiles()
 
     """
@@ -68,7 +57,7 @@ class MapSecondScenario(AbstractMap):
     Returns true if the person needs to be given to another zone,
     i.e., if he's on a Tile on a border
     """
-    def movePerson(self, person):
+    def isOnTile(self, person):
         return self.map[person.x][person.y].isOnTile()
 
     def loadMap(self):
