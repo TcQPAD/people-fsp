@@ -17,6 +17,23 @@ from core.utils.display import Display
 
 nb__logical_cores = ps.cpu_count(True)
 
+"""
+    Overrides the default warnings.showwarning()
+    function from the warnings package
+    We need to override it because warning.warn() prints 
+    the Python code of the warning to the user
+
+    Here, we only return the msg of the warning and NOT the Python code
+
+    see: https://stackoverflow.com/questions/2187269/python-print-only-the-message-on-warnings
+"""
+
+
+def custom_formatwarning(msg, *a):
+    # ignore everything except the message
+    return str(msg) + '\n'
+
+
 '''
     Starts the project by outputting information about the processes only,
     without UI. 
@@ -141,6 +158,7 @@ if __name__ == '__main__':
         # more threads than CPU cores, raise a warning
         # because program may be slower than expected
         if nbP > nb__logical_cores:
+            warnings.formatwarning = custom_formatwarning
             warnings.warn("Provided number of threads is > to number of available cores\n"
                           "It may slow the execution of the program instead of accelerating it !!!\n"
                           "Number of available cores: " + str(nb__logical_cores), UserWarning)
