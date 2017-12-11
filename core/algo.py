@@ -19,7 +19,6 @@ class Algorithm:
     __metaclass__ = ABCMeta
 
     def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None, loadMap=False):
-
         self.loadMap = loadMap
         self.map = map
         self.peopleNumber = peopleNumber
@@ -63,7 +62,6 @@ class Algorithm:
     '''
 
     def setUp(self):
-        p = math.pow(2, self.peopleNumber)
         print("Setting up %d threads and distributing %d persons", p, p)
         self.setUpMap()
         print("Finished setting up threads and distributing %d persons in the map", self.peopleNumber)
