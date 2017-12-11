@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from Tkinter import *
+from mttkinter import mtTkinter as tk
+
 
 DEFAULT_DISPLAY_WIDTH = 500
 DEFAULT_DISPLAY_HEIGHT = 500
@@ -20,8 +21,8 @@ class Display :
         self.xOrigin = 11
         self.yOrigin = 11
 
-        self.window = Tk()
-        self.canvas = Canvas(self.window, width=self.width+10, height=self.height+10, bg="white", bd=8)
+        self.window = tk.Tk()
+        self.canvas = tk.Canvas(self.window, width=self.width+10, height=self.height+10, bg="white", bd=8)
         self.canvas.pack()  # Affiche le Canvas
 
         self.drawBorders()
