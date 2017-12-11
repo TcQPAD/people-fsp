@@ -15,15 +15,12 @@ Class that holds the algorithm to move to the exit
 of the map
 '''
 
+
 class SecondScenario(Algorithm):
 
     def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None, loadMap=False):
         Algorithm.__init__(self, map, peopleNumber, display, loadMap)
-        self.loadMap = loadMap
-        self.map = map
-        self.peopleNumber = peopleNumber
-        self.persons = []
-        self.display = display
+
     '''
     Creates N threads representing people,
     with N = self.peopleNumber
@@ -32,12 +29,12 @@ class SecondScenario(Algorithm):
 
     def setUpMap(self):
         i = 0
-        nbP = math.pow(2, self.peopleNumber)
 
         # generates a list of random tuples representing random (x, y) coordinates
         if not self.loadMap:
-            randomCoordinates = [(randint(0, self.map.getSizeX() - 1), randint(0, self.map.getSizeY() - 1)) for k in range(int(nbP))]
-            while i < nbP:
+            randomCoordinates = [(randint(0, self.map.getSizeX() - 1), randint(0, self.map.getSizeY() - 1)) for k in
+                                 range(int(self.peopleNumber))]
+            while i < self.peopleNumber:
                 print("Creating and placing new person")
 
                 # picks a random tuple (x, y) from the list of random coordinates
@@ -94,7 +91,7 @@ class SecondScenario(Algorithm):
 
     def defineZone(self, xPerson, yPerson):
         if 0 < xPerson < self.map.getSizeX() / 2:
-            if 0 < yPerson< self.map.getSizeY() / 2:
+            if 0 < yPerson < self.map.getSizeY() / 2:
                 return 0
             else:
                 return 2

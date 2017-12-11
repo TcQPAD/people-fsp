@@ -5,6 +5,9 @@ import math  # To use math.pow(x,y) = x^y
 
 from core.algo import Algorithm
 from core.person import Person
+
+from concurrency.barrier import Barrier
+
 from random import randint, choice
 import sys
 DEFAULT_PEOPLE_NUMBER = 4
@@ -19,11 +22,7 @@ class FirstScenario(Algorithm):
 
     def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None, loadMap=False):
         Algorithm.__init__(self, map, peopleNumber, display, loadMap)
-        self.loadMap = loadMap
-        self.map = map
-        self.peopleNumber = peopleNumber
-        self.persons = []
-        self.display = display
+
     '''
     Creates N threads representing people,
     with N = self.peopleNumber
@@ -32,12 +31,11 @@ class FirstScenario(Algorithm):
 
     def setUpMap(self):
         i = 0
-        nbP = math.pow(2, self.peopleNumber)
 
         # generates a list of random tuples representing random (x, y) coordinates
         if not self.loadMap:
-            randomCoordinates = [(randint(0, self.map.getSizeX() - 1), randint(0, self.map.getSizeY() - 1)) for k in range(int(nbP))]
-            while i < nbP:
+            randomCoordinates = [(randint(0, self.map.getSizeX() - 1), randint(0, self.map.getSizeY() - 1)) for k in range(int(self.peopleNumber))]
+            while i < self.peopleNumber:
                 print("Creating and placing new person")
 
                 # picks a random tuple (x, y) from the list of random coordinates

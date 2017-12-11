@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from core.first_scenario import FirstScenario
 from core.map import Map
-from core.algo import Algorithm
 from core.display import Display
 from core.cpu_usage import CpuPercent
 
@@ -131,14 +130,14 @@ if __name__ == '__main__':
 
     if args.p:
         if args.p <= 512 * 128:
-            nbP = args.p
+            nbP = math.pow(2, args.p)
 
         else:
             raise Exception("Too many people provided with -p. Max value is : " + str(512*128))
 
         # more threads than CPU cores, raise a warning
         # because program may be slower than expected
-        if math.pow(2, args.p) > nb__logical_cores:
+        if nbP > nb__logical_cores:
             warnings.warn("Provided number of threads is > to number of available cores\n"
                           "It may slow the execution of the program instead of accelerating it !!!\n"
                           "Number of available cores: " + str(nb__logical_cores), UserWarning)
