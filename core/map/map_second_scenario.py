@@ -26,12 +26,15 @@ class MapSecondScenario(AbstractMap):
         self.display = display
         self.fillMap()
         self.draw()
+        self.setUpMap()
 
     def setUpMap(self):
         # init map zones
         i = 1
         while i < self.nb_zones:
             self.map_zones.append(MapZone(self, i - 1))
+
+        self.lockBorderTiles()
 
     """
     Locks the Tiles that are common to 2 MapZone objects
@@ -40,6 +43,7 @@ class MapSecondScenario(AbstractMap):
     We can use the Tile class because it has the same interface than 
     TileNotThreadSafe class
     """
+
     def lockBorderTiles(self):
         # vertical "re-typing"
         x = self.getSizeX() / 2
@@ -59,6 +63,13 @@ class MapSecondScenario(AbstractMap):
         while x < self.getSizeX() - 1:
             self.map[x][y] = Tile(TileValueEnum.empty)
             x += 1
+
+    """
+    Returns true if the person needs to be given to another zone,
+    i.e., if he's on a Tile on a border
+    """
+    def movePerson(self, person):
+        return self.map[person.x][person.y].isOnTile()
 
     def loadMap(self):
         # TODO

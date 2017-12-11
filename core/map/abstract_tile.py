@@ -13,6 +13,7 @@ class AbstractTile:
     """
     Returns the content of this Tile
     """
+
     @abstractmethod
     def getContent(self):
         pass
@@ -20,6 +21,7 @@ class AbstractTile:
     """
     Sets the content of this Tile to the given value
     """
+
     @abstractmethod
     def setContent(self, contentEnum):
         pass
@@ -27,6 +29,7 @@ class AbstractTile:
     """
     Returns true if the given person has reached the exit cell
     """
+
     @abstractmethod
     def isAtExit(self):
         pass
@@ -34,6 +37,7 @@ class AbstractTile:
     """
     Returns true if the given cell contains a person
     """
+
     @abstractmethod
     def isCellTaken(self):
         pass
@@ -41,6 +45,7 @@ class AbstractTile:
     """
     Returns true if a person can be placed in this Tile
     """
+
     @abstractmethod
     def canPlacePerson(self):
         pass
@@ -48,6 +53,7 @@ class AbstractTile:
     """
     Returns true if the given Tile has an obstacle
     """
+
     @abstractmethod
     def isObstacle(self):
         pass
@@ -55,6 +61,15 @@ class AbstractTile:
     """
     Returns true if the given Tile is an exit
     """
+
     @abstractmethod
     def isExit(self):
+        pass
+
+    """
+    Returns true since this class is the Tile class
+    """
+
+    @abstractmethod
+    def isOnTile(self):
         pass

@@ -40,6 +40,7 @@ class Tile(AbstractTile):
     """
     Returns the content of this Tile
     """
+
     def getContent(self):
         self.tileLock.acquire()
         tmp = self.content
@@ -78,6 +79,7 @@ class Tile(AbstractTile):
     """
     Returns true if a person can be placed in this Tile
     """
+
     def canPlacePerson(self):
         self.tileLock.acquire()
         tmp = (self.content == TileValueEnum.empty)
@@ -103,3 +105,12 @@ class Tile(AbstractTile):
         tmp = self.content == TileValueEnum.exit
         self.tileLock.release()
         return tmp
+
+    """
+    Returns true since this class is the Tile class
+    
+    No need to lock, it's atomic operation
+    """
+
+    def isOnTile(self):
+        return True
