@@ -53,7 +53,7 @@ def noUI():
             cpuPercent = CpuPercent(i)
 
             map = Map(True)
-            algorithm = Algorithm(map, nbP, None, True) if args.t == 0 else SecondScenario(map, nbP, None, False)
+            algorithm = FirstScenario(map, nbP, None, True) if args.t == 0 else SecondScenario(map, nbP, None, False)
 
             cpuPercent.start()
             algorithm.startAlgo()
