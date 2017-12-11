@@ -6,7 +6,7 @@ from random import randint, choice
 
 from concurrency.barrier import Barrier
 from core.algo import Algorithm
-from core.person import Person
+from core.person_first_scenario import PersonFirstScenario
 
 DEFAULT_PEOPLE_NUMBER = 4
 
@@ -58,7 +58,7 @@ class FirstScenario(Algorithm):
                         randomPickCoord = choice(randomCoordinates)
                         randomCoordinates.remove(randomPickCoord)
 
-                self.persons.append(Person(self, randomPickCoord[0], randomPickCoord[1], i, self.barrier))
+                self.persons.append(PersonFirstScenario(self, randomPickCoord[0], randomPickCoord[1], i, self.barrier))
                 self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
                 i += 1
 

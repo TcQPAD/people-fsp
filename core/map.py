@@ -5,12 +5,11 @@ from __future__ import print_function
 
 import random
 
+from concurrency.barrier import Barrier
 from core.obstacle import Obstacle
-from person import Person
+from person_first_scenario import PersonFirstScenario
 from tile import Tile
 from tile_value_enum import TileValueEnum
-
-from concurrency.barrier import Barrier
 
 MAP_X = 512
 MAP_Y = 128
@@ -257,7 +256,7 @@ class Map:
                 self.obstacleList.append(
                     Obstacle(int(coordonnee[0]), int(coordonnee[1]), int(coordonnee[2]), int(coordonnee[3])))
             else:
-                self.personList.append(Person(None, int(coordonnee[0]), int(coordonnee[1]), int(coordonnee[2]), self.barrier))
+                self.personList.append(PersonFirstScenario(None, int(coordonnee[0]), int(coordonnee[1]), int(coordonnee[2]), self.barrier))
 
             line = fileMap.readline()
         fileMap.close()

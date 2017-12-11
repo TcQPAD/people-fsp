@@ -1,12 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import math  # To use math.pow(x,y) = x^y
+import sys
+from random import randint, choice
 
 from core.algo import Algorithm
-from core.person import Person
-from random import randint, choice
-import sys
+from core.person_first_scenario import PersonFirstScenario
 
 DEFAULT_PEOPLE_NUMBER = 4
 
@@ -55,7 +54,7 @@ class SecondScenario(Algorithm):
                         randomPickCoord = choice(randomCoordinates)
                         randomCoordinates.remove(randomPickCoord)
                 zone = self.defineZone(randomPickCoord[0], randomPickCoord[1])
-                self.persons.append(Person(self, randomPickCoord[0], randomPickCoord[1], zone))
+                self.persons.append(PersonFirstScenario(self, randomPickCoord[0], randomPickCoord[1], zone))
                 self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
                 i += 1
 
