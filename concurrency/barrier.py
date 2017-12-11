@@ -10,6 +10,8 @@ some threads have finished their work before all threads have been started.
 
 This code is gotten from here: https://stackoverflow.com/questions/26622745/implementing-barrier-in-python2-7
 as it's a clean, simple and efficient solution to our problem
+
+Inspired by: http://greenteapress.com/wp/semaphores/
 """
 
 
@@ -24,6 +26,8 @@ class Barrier:
         self.mutex.acquire()
         self.count = self.count + 1
         self.mutex.release()
+        # opens the barrier if N threads
+        # are waiting
         if self.count == self.n:
             self.barrier.release()
         self.barrier.acquire()
