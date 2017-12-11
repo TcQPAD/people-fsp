@@ -5,7 +5,7 @@ import sys
 from random import randint, choice
 
 from core.algo import Algorithm
-from core.person_first_scenario import PersonFirstScenario
+from core.person_second_scenario import PersonSecondScenario
 
 DEFAULT_PEOPLE_NUMBER = 4
 
@@ -54,7 +54,7 @@ class SecondScenario(Algorithm):
                         randomPickCoord = choice(randomCoordinates)
                         randomCoordinates.remove(randomPickCoord)
                 zone = self.defineZone(randomPickCoord[0], randomPickCoord[1])
-                self.persons.append(PersonFirstScenario(self, randomPickCoord[0], randomPickCoord[1], zone))
+                self.persons.append(PersonSecondScenario(self, randomPickCoord[0], randomPickCoord[1], i, zone))
                 self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
                 i += 1
 
