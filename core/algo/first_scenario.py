@@ -40,7 +40,7 @@ class FirstScenario(Algorithm):
             while i < self.peopleNumber:
                 print("Creating and placing new person")
 
-                # picks a random tuple (x, y) from the list of random coordinates
+                #  picks a random tuple (x, y) from the list of random coordinates
                 randomPickCoord = choice(randomCoordinates)
                 # removes it so no other person will be placed here
                 randomCoordinates.remove(randomPickCoord)
