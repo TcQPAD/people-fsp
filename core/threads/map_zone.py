@@ -25,9 +25,11 @@ class MapZone(threading.Thread):
     """
 
     def handlePerson(self, person):
+        print "{0}\n".format("Added person to map zone: " + str(self.zoneId))
         self.persons.append(person)
 
     def discardPerson(self, person):
+        print "{0}\n".format("Deleted person from map zone: " + str(self.zoneId))
         self.persons.remove(person)
 
     def hasNoPerson(self):
@@ -35,6 +37,12 @@ class MapZone(threading.Thread):
         is_empty = len(self.persons)
         self.lock.release()
         return is_empty == 0
+
+    def hasPerson(self, person):
+        self.lock.acquire()
+        b = person in self.persons
+        self.lock.release()
+        return b
 
     def run(self):
         # wait all people or the race is unfair!
@@ -45,24 +53,23 @@ class MapZone(threading.Thread):
         while not self.algorithm.hasFinished():
 
             persons_to_discard = [person for person in self.persons if self.algorithm.getMap.isOnTile(person)]
+
             # person was on border
             # give it to another map zone
             for person in persons_to_discard:
                 self.algorithm.changePersonZone(self.zoneId, person)
 
             # refreshes the array of persons if some persons were on a border
-            self.persons = [person for person in self.persons if person not in persons_to_discard]
+            # self.persons = [person for person in self.persons if person not in persons_to_discard]
 
             # delete all people at exit if zone is zone 0 (containing the exit)
             if self.zoneId == 0:
                 self.persons = [person for person in self.persons if not self.algorithm.getMap.isAtExit(person)]
 
             for person in self.persons:
-                print "{0}\n".format("Moving person: " + str(person.x) + " , " + str(person.y))
-                if not self.algorithm.getMap.isOnTile(person):
+
+                if not self.algorithm.getMap.isAtExit(person):
+                    print "{0}\n".format("moving person: " + str(person.x) + ", " + str(person.y) + " tthreadid: " + str(self.zoneId))
                     self.algorithm.getMap.movePerson(person)
-
-
-
-
-
+                else:
+                    continue

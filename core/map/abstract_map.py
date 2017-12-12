@@ -112,16 +112,12 @@ class AbstractMap:
             person.y -= 1
 
     def moveAlongX(self, person):
-        if self.isObstacle(person.x - 1, person.y):
-            person.y += 1
-
-        person.x -= 1
+        if self.isObstacle(person.x, person.y - 1):
+            person.y -= 1
 
     def moveAlongY(self, person):
-        if self.isObstacle(person.x, person.y - 1):
-            person.x += 1
-
-        person.y -= 1
+        if self.isObstacle(person.x - 1, person.y):
+            person.x -= 1
 
     def fillMap(self):
         self.createBorder()

@@ -71,12 +71,11 @@ class SecondScenario(Algorithm):
                 # defines which zone is responsible of the person
                 zone = self.defineZone(randomPickCoord[0], randomPickCoord[1])
                 # create the new person
-                person = PersonSecondScenario(self, randomPickCoord[0], randomPickCoord[1], i, zone)
-                # give it to the corresponding zone
-                self.map_zones[zone].handlePerson(person)
                 # save it so we can save the persons if the simulation
                 # must be started once again
-                self.persons.append(person)
+                self.persons.append(PersonSecondScenario(self, randomPickCoord[0], randomPickCoord[1], i, zone))
+                # give it to the corresponding zone
+                self.map_zones[zone].handlePerson(self.persons[len(self.persons) - 1])
                 self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
                 i += 1
 
@@ -147,23 +146,23 @@ class SecondScenario(Algorithm):
     def changePersonZone(self, zoneId, person):
         self.lock.acquire()
 
+        # remove the person from the current map zone
+        self.map_zones[zoneId].discardPerson(person)
+
+        # then, add it to its new zone
         if person.x <= self.map.getSizeX() / 2:
             if person.y <= self.map.getSizeY() / 2:
-                if zoneId != 0:
-                    print "{0}\n".format("Changed person of zone " + str(person.x) + " , " + str(person.y))
+                if not self.map_zones[0].hasPerson(person):
                     self.map_zones[0].handlePerson(person)
             else:
-                if zoneId != 2:
-                    print "{0}\n".format("Changed person of zone " + str(person.x) + " , " + str(person.y))
+                if self.map_zones[2].hasPerson(person):
                     self.map_zones[2].handlePerson(person)
 
         elif person.y <= self.map.getSizeY() / 2:
-            if zoneId != 1:
-                print "{0}\n".format("Changed person of zone " + str(person.x) + " , " + str(person.y))
+            if self.map_zones[1].hasPerson(person):
                 self.map_zones[1].handlePerson(person)
         else:
-            if zoneId != 3:
-                print "{0}\n".format("Changed person of zone " + str(person.x) + " , " + str(person.y))
+            if self.map_zones[3].hasPerson(person):
                 self.map[3].handlePerson(person)
 
         self.lock.release()
