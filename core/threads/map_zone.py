@@ -25,11 +25,9 @@ class MapZone(threading.Thread):
     """
 
     def handlePerson(self, person):
-        print "{0}\n".format("Added person to map zone: " + str(self.zoneId))
         self.persons.append(person)
 
     def discardPerson(self, person):
-        print "{0}\n".format("Deleted person from map zone: " + str(self.zoneId))
         self.persons.remove(person)
 
     def hasNoPerson(self):
@@ -64,12 +62,16 @@ class MapZone(threading.Thread):
 
             # delete all people at exit if zone is zone 0 (containing the exit)
             if self.zoneId == 0:
+                lst = [person for person in self.persons if self.algorithm.getMap.isAtExit(person)]
+                for person in lst:
+                    print "{0}\n".format("Simulation was successful for person " + str(person.threadId)),
+                    print "{0}\n".format("Reached exit, stopping this thread... " + str(person.threadId)),
+
                 self.persons = [person for person in self.persons if not self.algorithm.getMap.isAtExit(person)]
 
             for person in self.persons:
 
                 if not self.algorithm.getMap.isAtExit(person):
-                    print "{0}\n".format("moving person: " + str(person.x) + ", " + str(person.y) + " tthreadid: " + str(self.zoneId))
                     self.algorithm.getMap.movePerson(person)
                 else:
                     continue
