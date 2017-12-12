@@ -59,3 +59,7 @@ class MapSecondScenario(AbstractMap):
     """
     def isOnTile(self, person):
         return self.map[person.x][person.y].isOnTile()
+
+    def loadMap(self):
+        # TODO
+        pass

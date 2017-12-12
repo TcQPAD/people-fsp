@@ -24,15 +24,53 @@ class FirstScenario(Algorithm):
         # a barrier for all the people,
         # that will ensure that all people work at the same time!
         self.barrier = Barrier(self.peopleNumber)
-        self.scenario = 0
 
+    '''
+    Creates N threads representing people,
+    with N = self.peopleNumber
+    Distributes the persons across the map
+    '''
 
+    def setUpMap(self):
+        i = 0
 
+        # generates a list of random tuples representing random (x, y) coordinates
+        if not self.loadMap:
+            randomCoordinates = [(randint(0, self.map.getSizeX() - 1), randint(0, self.map.getSizeY() - 1)) for k in range(int(self.peopleNumber))]
+            while i < self.peopleNumber:
+                print("Creating and placing new person")
 
-    def createPerson(self, algorithm, x, y, threadId, barrier):
-        newPerson = PersonFirstScenario(self, x, y, threadId, barrier)
-        self.persons.append(newPerson)
+                # picks a random tuple (x, y) from the list of random coordinates
+                randomPickCoord = choice(randomCoordinates)
+                # removes it so no other person will be placed here
+                randomCoordinates.remove(randomPickCoord)
 
+                if not self.map.canPlacePerson(randomPickCoord[0], randomPickCoord[1]):
+                    while not self.map.canPlacePerson(randomPickCoord[0], randomPickCoord[1]):
+                        # generate new coordinates in the list so we keep 1 tuple
+                        # for each person
+                        randomCoordinates.append(
+                            (
+                                randint(0, self.map.getSizeX() - 1),
+                                randint(0, self.map.getSizeY() - 1)
+                            )
+                        )
+                        randomPickCoord = choice(randomCoordinates)
+                        randomCoordinates.remove(randomPickCoord)
+
+                self.persons.append(PersonFirstScenario(self, randomPickCoord[0], randomPickCoord[1], i, self.barrier))
+                self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
+                i += 1
+
+            self.map.saveMap(self.persons)
+
+        else:
+            self.persons = self.map.personList
+
+            for (i, person) in enumerate(self.persons):
+                person.algorithm = self
+
+            print(str(len(self.persons)) + " person(s) loaded")
 
     '''
     Simulates the movement of 
