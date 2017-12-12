@@ -11,13 +11,14 @@ in the map of the simulation
 
 class MapZone(threading.Thread):
 
-    def __init__(self, algorithm, zoneId, barrier=None):
+    def __init__(self, algorithm, zoneId, barrier=None, queue=None):
         threading.Thread.__init__(self)
         self.persons = []
         self.algorithm = algorithm
         self.zoneId = zoneId
         self.barrier = barrier
         self.lock = threading.Lock()
+        self.queue = queue
 
     """
     Makes the current zone responsible of the given
@@ -73,5 +74,7 @@ class MapZone(threading.Thread):
 
                 if not self.algorithm.getMap.isAtExit(person):
                     self.algorithm.getMap.movePerson(person)
+                    if self.queue is not None:
+                        self.queue.put(str(person.x) + " " + str(person.y))
                 else:
                     continue

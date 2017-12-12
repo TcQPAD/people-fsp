@@ -131,12 +131,6 @@ class Display:
 
     def draw(self):
         while True:
-
-            if self.cpt == self.nbP:
-                self.window.quit()
-                # break the infinite loop
-                return
-
             try:
                 msg = self.queue.get(0)
 
@@ -155,9 +149,8 @@ class Display:
             except Queue.Empty:
                 break
 
-        if self.cpt != self.nbP:
-            # wait 100ms before de-queuing
-            self.window.after(10, self.draw)
+        # wait 100ms before de-queuing
+        self.window.after(10, self.draw)
 
     '''
     Erase a person dot

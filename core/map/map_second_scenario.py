@@ -15,12 +15,12 @@ representing the map, and store all the objects in it : people, obstacles, etc..
 
 class MapSecondScenario(AbstractMap):
 
-    def __init__(self, loadedMap=False, display=None):
-        super(MapSecondScenario, self).__init__(loadedMap, display)
+    def __init__(self, loadedMap=False, queue=None):
+        super(MapSecondScenario, self).__init__(loadedMap, queue)
         self.map = [[TileNotThreadSafe(TileValueEnum.empty) for y in range(self.MAP_Y + 2)] for x in
                     range(self.MAP_X + 2)]
         self.loadedMap = loadedMap
-        self.display = display
+        self.queue = queue
         self.fillMap()
         self.draw()
         self.lockBorderTiles()

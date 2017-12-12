@@ -26,6 +26,7 @@ class SecondScenario(Algorithm):
         self.map_zones = []
         self.barrier = Barrier(self.nb_zones)
         self.lock = Lock()
+        self.queue = queue
 
     '''
     Creates N threads representing people,
@@ -38,7 +39,7 @@ class SecondScenario(Algorithm):
         # init map zones
         i = 1
         while i <= self.nb_zones:
-            self.map_zones.append(MapZone(self, i - 1, self.barrier))
+            self.map_zones.append(MapZone(self, i - 1, self.barrier, self.queue))
             i += 1
 
         i = 0
