@@ -7,6 +7,7 @@ from abc import ABCMeta, abstractmethod
 from core.constants.tile_value_enum import TileValueEnum
 from core.map.obstacle import Obstacle
 
+
 """
 Abstract map to handle the data structure, and common methods
 """
@@ -198,7 +199,3 @@ class AbstractMap:
 
             if self.display is not None:
                 self.display.drawObstacle(obstacle.x1, obstacle.y1, obstacle.x2, obstacle.y2)
-
-    @abstractmethod
-    def loadMap(self):
-        pass

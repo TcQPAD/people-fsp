@@ -3,6 +3,8 @@
 
 from abc import ABCMeta, abstractmethod
 
+from core.map.save_load_map import SaveLoadMap
+
 DEFAULT_PEOPLE_NUMBER = 4
 
 '''
@@ -20,6 +22,7 @@ class Algorithm:
         self.peopleNumber = peopleNumber
         self.persons = []
         self.display = display
+        self.saveLoadMap = SaveLoadMap()
 
     '''
     A getter for the map

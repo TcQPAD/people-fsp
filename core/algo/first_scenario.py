@@ -62,10 +62,11 @@ class FirstScenario(Algorithm):
                 self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
                 i += 1
 
-            self.map.saveMap(self.persons)
+            self.saveLoadMap.saveMap(self.map, self.persons)
 
         else:
-            self.persons = self.map.personList
+            self.saveLoadMap.loadMap(0)
+            self.persons = self.saveLoadMap.personList
 
             for (i, person) in enumerate(self.persons):
                 person.algorithm = self

@@ -68,26 +68,35 @@ class SecondScenario(Algorithm):
                         randomPickCoord = choice(randomCoordinates)
                         randomCoordinates.remove(randomPickCoord)
 
-                # defines which zone is responsible of the person
-                zone = self.defineZone(randomPickCoord[0], randomPickCoord[1])
                 # create the new person
                 # save it so we can save the persons if the simulation
                 # must be started once again
-                self.persons.append(PersonSecondScenario(self, randomPickCoord[0], randomPickCoord[1], i, zone))
-                # give it to the corresponding zone
-                self.map_zones[zone].handlePerson(self.persons[len(self.persons) - 1])
-                self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
+                newPerson = PersonSecondScenario(self, randomPickCoord[0], randomPickCoord[1], i, None)
+                self.defineZoneForPerson(newPerson)
+
                 i += 1
 
-            # self.map.saveMap(self.persons)
+            self.saveLoadMap.saveMap(self.map, self.persons)
 
         else:
-            self.persons = self.map.personList
+            self.saveLoadMap.loadMap(1)
+            self.persons = self.saveLoadMap.personList
 
             for (i, person) in enumerate(self.persons):
                 person.algorithm = self
+                self.defineZoneForPerson(person)
 
             print(str(len(self.persons)) + " person(s) loaded")
+
+    def defineZoneForPerson(self, person):
+        # defines which zone is responsible of the person
+        zone = self.defineZone(person.x, person.y)
+        person.threadId = zone
+        self.persons.append(person)
+
+        # give it to the corresponding zone
+        self.map_zones[zone].handlePerson(self.persons[len(self.persons) - 1])
+        self.map.setCell(person.x, person.y, person)
 
     '''
     Simulates the movement of 
