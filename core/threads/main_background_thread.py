@@ -108,7 +108,6 @@ class Main(threading.Thread):
                                                                                                           self.queue,
                                                                                                           True if self.args.m else False)
         algorithm.startAlgo()
-        self.queue.put("exit")
         return
 
     """

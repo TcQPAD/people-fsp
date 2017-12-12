@@ -102,3 +102,7 @@ class PersonFirstScenario(threading.Thread, AbstractPerson):
             print "{0}\n".format("Simulation was successful for person " + str(self.threadId)),
 
         print "{0}\n".format("Reached exit, stopping this thread... " + str(self.threadId)),
+        if self._algorithm.getQueue is not None:
+            # sends the coordinates in the queue to notify the main thread
+            # that a person has moved
+            self._algorithm.getQueue.put("exit")

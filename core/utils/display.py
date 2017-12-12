@@ -6,8 +6,8 @@ from Tkinter import *
 
 from core.threads.main_background_thread import Main
 
-DEFAULT_DISPLAY_WIDTH = 500
-DEFAULT_DISPLAY_HEIGHT = 500
+DEFAULT_DISPLAY_WIDTH = 512
+DEFAULT_DISPLAY_HEIGHT = 128
 MARGIN = 5
 
 '''
@@ -38,6 +38,8 @@ class Display:
         self.height = height
         self.xOrigin = 11
         self.yOrigin = 11
+
+        self.cpt = 0
 
         self.window = gui
         self.canvas = Canvas(self.window, width=self.width + 10, height=self.height + 10, bg="white", bd=8)
@@ -128,23 +130,32 @@ class Display:
     """
 
     def draw(self):
-        try:
-            msg = self.queue.get(0)
+        while True:
 
-            print(msg)
+            if self.cpt == self.nbP:
+                self.window.quit()
+                # break the infinite loop
+                return
 
-            # if all threads finished working
-            if "exit" in msg:
-                self.displayFinalState()
-            # this a person coordinate
-            else:
-                msg = msg.split()  # splits coordinates in an array of size 2 or 4
-                if len(msg) == 2:  # this is a person
-                    self.drawPerson(int(msg[0]), int(msg[1]))
-                elif len(msg) == 4:  # this an obstacle
-                    self.drawObstacle(int(msg[0]), int(msg[1]), int(msg[2]), int(msg[3]))
+            try:
+                msg = self.queue.get(0)
 
-        except Queue.Empty:
+                # if all threads finished working
+                if "exit" in msg:
+                    # leaves the tkinter window
+                    self.cpt += 1
+                # this a person coordinate
+                else:
+                    msg = msg.split()  # splits coordinates in an array of size 2 or 4
+                    if len(msg) == 2:  # this is a person
+                        self.drawPerson(int(msg[0]), int(msg[1]))
+                    elif len(msg) == 4:  # this an obstacle
+                        self.drawObstacle(int(msg[0]), int(msg[1]), int(msg[2]), int(msg[3]))
+
+            except Queue.Empty:
+                break
+
+        if self.cpt != self.nbP:
             # wait 100ms before de-queuing
             self.window.after(10, self.draw)
 
