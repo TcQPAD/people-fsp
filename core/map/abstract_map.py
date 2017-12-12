@@ -15,13 +15,13 @@ Abstract map to handle the data structure, and common methods
 class AbstractMap:
     __metaclass__ = ABCMeta
 
-    def __init__(self, loadedMap=False, display=None):
+    def __init__(self, loadedMap=False, queue=None):
         self.map = []
         self.MAP_X = 512
         self.MAP_Y = 128
         self.loadedMap = loadedMap
         self.obstacleList = []
-        self.display = display
+        self.queue = queue
 
     def getSizeX(self):
         return self.MAP_X
@@ -196,8 +196,8 @@ class AbstractMap:
         for obstacle in self.obstacleList:
             self.fillArea(obstacle.x1, obstacle.x2, obstacle.y1, obstacle.y2)
 
-            if self.display is not None:
-                self.display.drawObstacle(obstacle.x1, obstacle.y1, obstacle.x2, obstacle.y2)
+            if self.queue is not None:
+                self.queue.put(str(obstacle.x1) + " " + str(obstacle.y1) + " " + str(obstacle.x2) + " " + str(obstacle.y2))
 
     @abstractmethod
     def loadMap(self):

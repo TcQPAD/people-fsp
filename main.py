@@ -3,9 +3,10 @@
 
 import argparse
 import math
-
 # gets the number of physical AND logical cores
 # available on the current machine
+from Tkinter import Tk
+
 from core.threads.main_background_thread import Main
 from core.utils.display import Display
 
@@ -31,9 +32,10 @@ def noUI():
 
 
 def yesUI():
-    display = Display()
-    Main(nbP, display.queue, args).start()
-    display.startTk()
+    root = Tk()
+    root.title("Test Button")
+    display = Display(nbP, args, root)
+    root.mainloop()
 
 
 if __name__ == '__main__':

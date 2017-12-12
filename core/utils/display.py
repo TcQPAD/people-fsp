@@ -4,6 +4,8 @@
 import Queue  # a Thread safe Queue to receive the commands from other Threads
 from Tkinter import *
 
+from core.threads.main_background_thread import Main
+
 DEFAULT_DISPLAY_WIDTH = 500
 DEFAULT_DISPLAY_HEIGHT = 500
 MARGIN = 5
@@ -24,8 +26,11 @@ the background threads in order to draw the simulation
 
 class Display:
 
-    def __init__(self, width=DEFAULT_DISPLAY_WIDTH, height=DEFAULT_DISPLAY_HEIGHT):
+    def __init__(self, nbP, args, gui, width=DEFAULT_DISPLAY_WIDTH, height=DEFAULT_DISPLAY_HEIGHT):
         print("Let's display this!")
+
+        self.nbP = nbP
+        self.args = args
 
         self.queue = Queue.Queue()
 
@@ -34,20 +39,21 @@ class Display:
         self.xOrigin = 11
         self.yOrigin = 11
 
-        self.window = None
-        self.canvas = None
+        self.window = gui
+        self.canvas = Canvas(self.window, width=self.width + 10, height=self.height + 10, bg="white", bd=8)
+        self.startTk()
 
     @property
     def queue(self):
         return self.queue
 
     def startTk(self):
-        self.window = Tk()
-        self.canvas = Canvas(self.window, width=self.width + 10, height=self.height + 10, bg="white", bd=8)
         self.canvas.pack()  # Affiche le Canvas
-
         self.drawBorders()
-        self.draw()
+
+        Main(self.nbP, self.queue, self.args).start()
+
+        self.window.after(10, self.draw)
 
     def displayFinalState(self):
         self.window.mainloop()
@@ -125,17 +131,22 @@ class Display:
         try:
             msg = self.queue.get(0)
 
+            print(msg)
+
             # if all threads finished working
             if "exit" in msg:
-                pass
+                self.displayFinalState()
             # this a person coordinate
             else:
-                msg = msg.split()  # splits coordinates in an array of size 2
-                self.drawPerson(int(msg[0]), int(msg[1]))
+                msg = msg.split()  # splits coordinates in an array of size 2 or 4
+                if len(msg) == 2:  # this is a person
+                    self.drawPerson(int(msg[0]), int(msg[1]))
+                elif len(msg) == 4:  # this an obstacle
+                    self.drawObstacle(int(msg[0]), int(msg[1]), int(msg[2]), int(msg[3]))
 
         except Queue.Empty:
             # wait 100ms before de-queuing
-            self.window.after(100, self.draw)
+            self.window.after(10, self.draw)
 
     '''
     Erase a person dot

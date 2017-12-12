@@ -89,6 +89,8 @@ class Main(threading.Thread):
             # returns the measurements for the 5 simulations
             cpuPercent.produce_report()
 
+        self.queue.put("exit")
+
         return
 
     '''
@@ -106,6 +108,7 @@ class Main(threading.Thread):
                                                                                                           self.queue,
                                                                                                           True if self.args.m else False)
         algorithm.startAlgo()
+        self.queue.put("exit")
         return
 
     """
