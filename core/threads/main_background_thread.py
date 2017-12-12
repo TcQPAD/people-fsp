@@ -88,9 +88,6 @@ class Main(threading.Thread):
             cpuPercent.join()
             # returns the measurements for the 5 simulations
             cpuPercent.produce_report()
-
-        self.queue.put("exit")
-
         return
 
     '''
