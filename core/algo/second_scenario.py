@@ -26,15 +26,7 @@ class SecondScenario(Algorithm):
         self.map_zones = []
         self.barrier = Barrier(self.nb_zones)
         self.lock = Lock()
-
-    '''
-    Creates N threads representing people,
-    with N = self.peopleNumber
-    Distributes the persons across the map
-    '''
-
-    def setUpMap(self):
-
+        self.scenario = 1
         # init map zones
         i = 1
         while i <= self.nb_zones:
@@ -43,50 +35,10 @@ class SecondScenario(Algorithm):
 
         i = 0
 
-        # generates a list of random tuples representing random (x, y) coordinates
-        if not self.loadMap:
-            randomCoordinates = [(randint(0, self.map.getSizeX() - 1), randint(0, self.map.getSizeY() - 1)) for k in
-                                 range(int(self.peopleNumber))]
-            while i < self.peopleNumber:
-                print("Creating and placing new person")
+    def createPerson(self, algorithm, x, y, threadId, barrier):
+        newPerson = PersonSecondScenario(self, x, y, threadId, barrier)
+        self.defineZoneForPerson(newPerson)
 
-                # picks a random tuple (x, y) from the list of random coordinates
-                randomPickCoord = choice(randomCoordinates)
-                # removes it so no other person will be placed here
-                randomCoordinates.remove(randomPickCoord)
-
-                if not self.map.canPlacePerson(randomPickCoord[0], randomPickCoord[1]):
-                    while not self.map.canPlacePerson(randomPickCoord[0], randomPickCoord[1]):
-                        # generate new coordinates in the list so we keep 1 tuple
-                        # for each person
-                        randomCoordinates.append(
-                            (
-                                randint(0, self.map.getSizeX() - 1),
-                                randint(0, self.map.getSizeY() - 1)
-                            )
-                        )
-                        randomPickCoord = choice(randomCoordinates)
-                        randomCoordinates.remove(randomPickCoord)
-
-                # create the new person
-                # save it so we can save the persons if the simulation
-                # must be started once again
-                newPerson = PersonSecondScenario(self, randomPickCoord[0], randomPickCoord[1], i, None)
-                self.defineZoneForPerson(newPerson)
-
-                i += 1
-
-            self.saveLoadMap.saveMap(self.map, self.persons)
-
-        else:
-            self.saveLoadMap.loadMap(1)
-            self.persons = self.saveLoadMap.personList
-
-            for (i, person) in enumerate(self.persons):
-                person.algorithm = self
-                self.defineZoneForPerson(person)
-
-            print(str(len(self.persons)) + " person(s) loaded")
 
     def defineZoneForPerson(self, person):
         # defines which zone is responsible of the person
@@ -187,3 +139,7 @@ class SecondScenario(Algorithm):
         b = cpt == 4
         self.lock.release()
         return b
+
+
+    def specificLoad(self, person):
+        self.defineZoneForPerson(person)
