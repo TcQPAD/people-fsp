@@ -89,8 +89,10 @@ class PersonFirstScenario(threading.Thread, AbstractPerson):
                 self.algorithm.getDisplay.erasePerson(self._x, self._y)
             '''
             self._algorithm.getMap.movePerson(self)
-            if self._algorithm.getDisplay is not None:
-                self._algorithm.getDisplay.drawPerson(self._x, self._y)
+            if self._algorithm.getQueue is not None:
+                # sends the coordinates in the queue to notify the main thread
+                # that a person has moved
+                self._algorithm.getQueue.put(str(self._x) + " " + str(self._y))
 
         if not self._algorithm.getMap.isAtExit(self):
             print "{0}\n".format(

@@ -14,12 +14,12 @@ of the map
 class Algorithm:
     __metaclass__ = ABCMeta
 
-    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None, loadMap=False):
+    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, queue=None, loadMap=False):
         self.loadMap = loadMap
         self.map = map
         self.peopleNumber = peopleNumber
         self.persons = []
-        self.display = display
+        self.queue = queue
 
     '''
     A getter for the map
@@ -40,8 +40,8 @@ class Algorithm:
     '''
 
     @property
-    def getDisplay(self):
-        return self.display
+    def getQueue(self):
+        return self.queue
 
     '''
     Starts the algorithm

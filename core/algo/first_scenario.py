@@ -18,8 +18,8 @@ of the map
 
 class FirstScenario(Algorithm):
 
-    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None, loadMap=False):
-        Algorithm.__init__(self, map, peopleNumber, display, loadMap)
+    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, queue=None, loadMap=False):
+        Algorithm.__init__(self, map, peopleNumber, queue, loadMap)
 
         # a barrier for all the people,
         # that will ensure that all people work at the same time!

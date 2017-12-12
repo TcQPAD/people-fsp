@@ -22,13 +22,13 @@ NAME_MAP = "map.txt"
 
 class MapFirstScenario(AbstractMap):
 
-    def __init__(self, peopleNumber, loadedMap=False, display=None):
-        super(MapFirstScenario, self).__init__(loadedMap, display)
+    def __init__(self, peopleNumber, loadedMap=False, queue=None):
+        super(MapFirstScenario, self).__init__(loadedMap, queue)
         self.map = [[Tile(TileValueEnum.empty) for y in range(self.MAP_Y + 2)] for x in range(self.MAP_X + 2)]
         self.personList = []
         self.peopleNumber = peopleNumber
         self.barrier = Barrier(self.peopleNumber)
-        self.display = display
+        self.queue = queue
         self.loadedMap = loadedMap
         self.fillMap()
         self.draw()

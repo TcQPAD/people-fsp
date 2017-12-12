@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import Queue  # a Thread safe Queue to receive the commands from other Threads
 from Tkinter import *
 
 DEFAULT_DISPLAY_WIDTH = 500
@@ -9,6 +10,15 @@ MARGIN = 5
 
 '''
 Class that holds the graphic display of the simulation
+
+This class MUST BE RUN ON THE MAIN THREAD or a "main loop not in main thread"
+error will spawn randomly
+
+This class uses a Queue in order to get the messages/commands
+from background threads running the simulation.
+
+This is useful to avoid blocking the main Thread, and to communicate with
+the background threads in order to draw the simulation
 '''
 
 
@@ -17,16 +27,27 @@ class Display:
     def __init__(self, width=DEFAULT_DISPLAY_WIDTH, height=DEFAULT_DISPLAY_HEIGHT):
         print("Let's display this!")
 
+        self.queue = Queue.Queue()
+
         self.width = width
         self.height = height
         self.xOrigin = 11
         self.yOrigin = 11
 
+        self.window = None
+        self.canvas = None
+
+    @property
+    def queue(self):
+        return self.queue
+
+    def startTk(self):
         self.window = Tk()
         self.canvas = Canvas(self.window, width=self.width + 10, height=self.height + 10, bg="white", bd=8)
         self.canvas.pack()  # Affiche le Canvas
 
         self.drawBorders()
+        self.draw()
 
     def displayFinalState(self):
         self.window.mainloop()
@@ -91,6 +112,30 @@ class Display:
 
     def drawPerson(self, x, y):
         self.drawDot(x, y, "blue")
+
+    """
+    Draws something based on the message
+    received in the thread safe queue, from a background worker thread
+    
+    This method is called indefinitely till the main thread is destroyed,
+    typically when reaching the end of the simulation
+    """
+
+    def draw(self):
+        try:
+            msg = self.queue.get(0)
+
+            # if all threads finished working
+            if "exit" in msg:
+                pass
+            # this a person coordinate
+            else:
+                msg = msg.split()  # splits coordinates in an array of size 2
+                self.drawPerson(int(msg[0]), int(msg[1]))
+
+        except Queue.Empty:
+            # wait 100ms before de-queuing
+            self.window.after(100, self.draw)
 
     '''
     Erase a person dot

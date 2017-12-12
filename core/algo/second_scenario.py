@@ -20,8 +20,8 @@ of the map
 
 class SecondScenario(Algorithm):
 
-    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, display=None, loadMap=False):
-        Algorithm.__init__(self, map, peopleNumber, display, loadMap)
+    def __init__(self, map, peopleNumber=DEFAULT_PEOPLE_NUMBER, queue=None, loadMap=False):
+        Algorithm.__init__(self, map, peopleNumber, queue, loadMap)
         self.nb_zones = 4
         self.map_zones = []
         self.barrier = Barrier(self.nb_zones)
