@@ -74,7 +74,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.p:
-        if not (args.p <= 512 * 128):
+        if args.p > 9:
             raise Exception("Too many people provided with -p. Max value is : " + str(512 * 128))
 
     nbP = math.pow(2, args.p)
