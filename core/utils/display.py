@@ -134,12 +134,14 @@ class Display:
             try:
                 msg = self.queue.get(0)
 
-                # if all threads finished working
+                # if one person left the map
                 if "exit" in msg:
-                    # leaves the tkinter window
+                    # increment people out counter
                     self.cpt += 1
                     print("Reached exit for " + msg.split()[1])
+                    # if everyone left the map
                     if self.cpt == self.nbP:
+                        # exit the window
                         print("Everyone (" + str(self.cpt) + " persons) reached the exit.\nExiting program...")
                         self.window.destroy()
                         return
@@ -154,6 +156,7 @@ class Display:
             except Queue.Empty:
                 break
 
+        # self.window is the GUI object
         # wait 10ms before de-queuing
         self.window.after(10, self.draw)
 
