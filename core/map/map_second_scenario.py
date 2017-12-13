@@ -27,7 +27,7 @@ class MapSecondScenario(AbstractMap):
         self.loadedMap = loadedMap
         self.queue = queue
         self.peopleNumber = nbP
-        self.barrier = Barrier(self.peopleNumber)
+        self.barrier = Barrier(4)
         self.fillMap()
         self.draw()
         self.lockBorderTiles()
