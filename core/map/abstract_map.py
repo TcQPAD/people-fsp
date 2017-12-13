@@ -112,12 +112,14 @@ class AbstractMap:
             person.y -= 1
 
     def moveAlongX(self, person):
-        # no need to check obstacle because obstacle can't touch the borders of the map
-        person.y -= 1
+        if not self.isObstacle(person.x, person.y - 1):
+            # no need to check obstacle because obstacle can't touch the borders of the map
+            person.y -= 1
 
     def moveAlongY(self, person):
-        # no need to check obstacle because obstacle can't touch the borders of the map
-        person.x -= 1
+        if not self.isObstacle(person.x - 1, person.y):
+            # no need to check obstacle because obstacle can't touch the borders of the map
+            person.x -= 1
 
     def fillMap(self):
         self.createBorder()

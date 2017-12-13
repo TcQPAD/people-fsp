@@ -42,7 +42,7 @@ class MapSecondScenario(AbstractMap):
         # we can reuse it to behave like a TileNotThreadSafe because
         # they have the exact same interface which is AbstractTile
         while y < self.getSizeY() - 1:
-            self.map[x][y] = Tile(TileValueEnum.empty)
+            self.map[x][y] = Tile(self.map[x][y].getContent())
             y += 1
 
         # horizontal "re-typing"
@@ -50,7 +50,7 @@ class MapSecondScenario(AbstractMap):
         y = self.getSizeY() / 2
 
         while x < self.getSizeX() - 1:
-            self.map[x][y] = Tile(TileValueEnum.empty)
+            self.map[x][y] = Tile(self.map[x][y].getContent())
             x += 1
 
     """

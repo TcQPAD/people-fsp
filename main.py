@@ -33,7 +33,7 @@ def noUI():
 
 def yesUI():
     root = Tk()
-    root.title("Test Button")
+    root.title("Projet concurrence")
     display = Display(nbP, args, root)
     root.mainloop()
 

@@ -156,14 +156,14 @@ class SecondScenario(Algorithm):
                 if not self.map_zones[0].hasPerson(person):
                     self.map_zones[0].handlePerson(person)
             else:
-                if self.map_zones[2].hasPerson(person):
+                if not self.map_zones[2].hasPerson(person):
                     self.map_zones[2].handlePerson(person)
 
         elif person.y <= self.map.getSizeY() / 2:
-            if self.map_zones[1].hasPerson(person):
+            if not self.map_zones[1].hasPerson(person):
                 self.map_zones[1].handlePerson(person)
         else:
-            if self.map_zones[3].hasPerson(person):
+            if not self.map_zones[3].hasPerson(person):
                 self.map[3].handlePerson(person)
 
         self.lock.release()
