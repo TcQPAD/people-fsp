@@ -33,12 +33,11 @@ class FirstScenario(Algorithm):
 
     def setUpMap(self):
         i = 0
-
+        print("Creating and placing people")
         # generates a list of random tuples representing random (x, y) coordinates
         if not self.loadMap:
             randomCoordinates = [(randint(0, self.map.getSizeX() - 1), randint(0, self.map.getSizeY() - 1)) for k in range(int(self.peopleNumber))]
             while i < self.peopleNumber:
-                print("Creating and placing new person")
 
                 # picks a random tuple (x, y) from the list of random coordinates
                 randomPickCoord = choice(randomCoordinates)
