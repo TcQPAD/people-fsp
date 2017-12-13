@@ -12,7 +12,6 @@ from core.utils.display import Display
 
 parser = argparse.ArgumentParser()
 args = None
-nbP = 4
 main = None
 
 '''
@@ -21,7 +20,7 @@ main = None
 '''
 
 
-def noUI():
+def noUI(nbP):
     Main(nbP, None, args).start()
 
 
@@ -31,10 +30,10 @@ def noUI():
 '''
 
 
-def yesUI():
+def yesUI(nbPerson):
     root = Tk()
     root.title("Projet concurrence")
-    display = Display(nbP, args, root)
+    display = Display(nbPerson, args, root)
     root.mainloop()
 
 
@@ -75,18 +74,17 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.p:
-        if args.p <= 512 * 128:
-            nbP = math.pow(2, args.p)
-
-        else:
+        if not (args.p <= 512 * 128):
             raise Exception("Too many people provided with -p. Max value is : " + str(512 * 128))
 
+    nbP = math.pow(2, args.p)
+
     if args.m:
-        noUI()
+        noUI(nbP)
         exit(0)
     elif args.showUi == "true":
-        yesUI()
+        yesUI(nbP)
         exit(0)
     else:
-        noUI()
+        noUI(nbP)
         exit(0)
