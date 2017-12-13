@@ -126,7 +126,7 @@ class Main(threading.Thread):
 
         # more threads than CPU cores, raise a warning
         # because program may be slower than expected
-        if self.nbP > nb__logical_cores:
+        if self.nbP > nb__logical_cores and self.args.t == 0:
             warnings.showwarning = self.custom_formatwarning
             warnings.warn("Provided number of threads is > to number of available cores\n"
                           "It may slow the execution of the program instead of accelerating it !!!\n"
