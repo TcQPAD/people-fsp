@@ -138,8 +138,9 @@ class Display:
                 if "exit" in msg:
                     # leaves the tkinter window
                     self.cpt += 1
+                    print("Reached exit for " + msg.split()[1])
                     if self.cpt == self.nbP:
-                        self.window.quit()
+                        self.window.destroy()
                         return
                 # this a person coordinate
                 else:

@@ -44,7 +44,7 @@ if __name__ == '__main__':
         "--showUi",
         type=str,
         default="true",
-        help="Valeur booléenne spécifiant si la partie graphique devrait être affichée ou non. \nValeur par défaut : "
+        help="Valeur booleenne specifiant si la partie graphique devrait etre affichee ou non. \nValeur par defaut : "
              "faux. "
     )
 
@@ -52,14 +52,14 @@ if __name__ == '__main__':
         "-p",
         type=int,
         default=4,
-        help="Puissance de 2 pour le nombre de personnes à insérer dans la simulation. Valeur par défaut: 4 (donc 2^4 "
+        help="Puissance de 2 pour le nombre de personnes a inserer dans la simulation. Valeur par defaut: 4 (donc 2^4 "
              "= 16 personnes). "
     )
 
     parser.add_argument(
         "-m",
         action="store_true",  # to tell that this option has no value
-        help="Si donné comme argument du programme, affiche des statistiques du CPU sur la sortie standard à la fin de l'exécution"
+        help="Si donne comme argument du programme, affiche des statistiques du CPU sur la sortie standard a la fin de l'execution"
              "du programme."
     )
 
@@ -67,7 +67,7 @@ if __name__ == '__main__':
         "-t",
         type=int,
         default=0,
-        help="Scenario à exécuter. 0 ou 1."
+        help="Scenario a executer. 0 ou 1."
     )
 
     # data structure with the argument (dictionary) that will be easily

@@ -65,8 +65,10 @@ class MapZone(threading.Thread):
             if self.zoneId == 0:
                 lst = [person for person in self.persons if self.algorithm.getMap.isAtExit(person)]
                 for person in lst:
-                    print "{0}\n".format("Simulation was successful for person " + str(person.threadId)),
-                    print "{0}\n".format("Reached exit, stopping this thread... " + str(person.threadId)),
+                    if self.queue is None:
+                        print "{0}\n".format("Person " + str(person.threadId) + " reached exit, stopping thread " + str(person.threadId)),
+                    else:
+                        self.queue.put("exit " + str(person.threadId))
 
                 self.persons = [person for person in self.persons if not self.algorithm.getMap.isAtExit(person)]
 

@@ -99,10 +99,10 @@ class PersonFirstScenario(threading.Thread, AbstractPerson):
                 "Person not at exit: " + str(self.threadId) + "\t, coordinates: " + str(self._x) + ", " + str(self._y)),
             raise Exception("Some persons didn't reach the exit of the map")
         else:
-            print "{0}\n".format("Simulation was successful for person " + str(self.threadId)),
+            if self._algorithm.getQueue is None:
+                print "{0}\n".format("Person " + str(self.threadId) + " reached exit, stopping thread " + str(self.threadId)),
 
-        print "{0}\n".format("Reached exit, stopping this thread... " + str(self.threadId)),
         if self._algorithm.getQueue is not None:
             # sends the coordinates in the queue to notify the main thread
             # that a person has moved
-            self._algorithm.getQueue.put("exit")
+            self._algorithm.getQueue.put("exit " + str(self.threadId))
