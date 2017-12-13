@@ -140,6 +140,7 @@ class Display:
                     self.cpt += 1
                     print("Reached exit for " + msg.split()[1])
                     if self.cpt == self.nbP:
+                        print("Everyone (" + str(self.cpt) + " persons) reached the exit.\nExiting program...")
                         self.window.destroy()
                         return
                 # this a person coordinate

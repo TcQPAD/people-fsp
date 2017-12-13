@@ -68,7 +68,7 @@ class Main(threading.Thread):
                 # see: https://docs.python.org/2/library/multiprocessing.html
                 cpuPercent = CpuPercent(i)
 
-                map = MapFirstScenario(self.nbP, True) if self.args.t == 0 else MapSecondScenario(self.nbP, False, self.queue)
+                map = MapFirstScenario(self.nbP, True) if self.args.t == 0 else MapSecondScenario(self.nbP, True, self.queue)
                 algorithm = FirstScenario(map, self.nbP, None, True) if self.args.t == 0 else SecondScenario(map,
                                                                                                              self.nbP,
                                                                                                              None,

@@ -80,13 +80,17 @@ class SecondScenario(Algorithm):
                 self.map.setCell(randomPickCoord[0], randomPickCoord[1], self.persons[i])
                 i += 1
 
-            # self.map.saveMap(self.persons)
+            self.map.saveMap(self.persons)
 
         else:
             self.persons = self.map.personList
 
             for (i, person) in enumerate(self.persons):
                 person.algorithm = self
+                # distributes people across the zones
+                zone = self.defineZone(person.x, person.y)
+                # give it to the corresponding zone
+                self.map_zones[zone].handlePerson(person)
 
             print(str(len(self.persons)) + " person(s) loaded")
 
