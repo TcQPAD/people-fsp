@@ -25,7 +25,6 @@ class MapFirstScenario(AbstractMap):
     def __init__(self, peopleNumber, loadedMap=False, queue=None):
         super(MapFirstScenario, self).__init__(loadedMap, queue)
         self.map = [[Tile(TileValueEnum.empty) for y in range(self.MAP_Y + 2)] for x in range(self.MAP_X + 2)]
-        self.personList = []
         self.peopleNumber = peopleNumber
         self.barrier = Barrier(self.peopleNumber)
         self.queue = queue
@@ -72,7 +71,3 @@ class MapFirstScenario(AbstractMap):
 
             line = fileMap.readline()
         fileMap.close()
-
-    @property
-    def getPersons(self):
-        return self.personList

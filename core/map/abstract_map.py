@@ -21,6 +21,7 @@ class AbstractMap:
         self.MAP_Y = 128
         self.loadedMap = loadedMap
         self.obstacleList = []
+        self.personList = []
         self.queue = queue
 
     def getSizeX(self):
@@ -28,6 +29,10 @@ class AbstractMap:
 
     def getSizeY(self):
         return self.MAP_Y
+
+    @property
+    def getPersons(self):
+        return self.personList
 
     """
     Returns true if the given cell contains a person

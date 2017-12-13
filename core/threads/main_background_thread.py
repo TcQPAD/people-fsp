@@ -44,7 +44,7 @@ class Main(threading.Thread):
         if self.args.m:
             cpuPercent = CpuPercent(0)
 
-        map = MapFirstScenario(self.nbP, False) if self.args.t == 0 else MapSecondScenario(False, self.queue)
+        map = MapFirstScenario(self.nbP, False) if self.args.t == 0 else MapSecondScenario(self.nbP, False, self.queue)
         algorithm = FirstScenario(map, self.nbP, None, False) if self.args.t == 0 else SecondScenario(map, self.nbP,
                                                                                                       None, False)
 
@@ -68,7 +68,7 @@ class Main(threading.Thread):
                 # see: https://docs.python.org/2/library/multiprocessing.html
                 cpuPercent = CpuPercent(i)
 
-                map = MapFirstScenario(self.nbP, True) if self.args.t == 0 else MapSecondScenario(False, self.queue)
+                map = MapFirstScenario(self.nbP, True) if self.args.t == 0 else MapSecondScenario(self.nbP, False, self.queue)
                 algorithm = FirstScenario(map, self.nbP, None, True) if self.args.t == 0 else SecondScenario(map,
                                                                                                              self.nbP,
                                                                                                              None,
@@ -98,7 +98,7 @@ class Main(threading.Thread):
     def yesUI(self):
         print("Starting project with UI!")
         map = MapFirstScenario(self.nbP, True if self.args.m else False,
-                               self.queue) if self.args.t == 0 else MapSecondScenario(False, self.queue)
+                               self.queue) if self.args.t == 0 else MapSecondScenario(self.nbP, False, self.queue)
         algorithm = FirstScenario(map, self.nbP, self.queue,
                                   True if self.args.m else False) if self.args.t == 0 else SecondScenario(map,
                                                                                                           self.nbP,
