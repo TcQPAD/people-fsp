@@ -138,6 +138,9 @@ class Display:
                 if "exit" in msg:
                     # leaves the tkinter window
                     self.cpt += 1
+                    if self.cpt == self.nbP:
+                        self.window.quit()
+                        return
                 # this a person coordinate
                 else:
                     msg = msg.split()  # splits coordinates in an array of size 2 or 4
@@ -149,7 +152,7 @@ class Display:
             except Queue.Empty:
                 break
 
-        # wait 100ms before de-queuing
+        # wait 10ms before de-queuing
         self.window.after(10, self.draw)
 
     '''
